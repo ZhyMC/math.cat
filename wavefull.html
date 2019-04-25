@@ -185,8 +185,29 @@ let we=255/Math.max(sumR,sumG,sumB);
 colors[i]={sumR,sumG,sumB};
 }
 	
+	
+var avgs={avgR:0,avgG:0,avgB:0}
+for(let i=0;i<colors.length;i++){//使用人眼对比值理论处理
+let sumR=0;let sumG=0;let sumB=0;
+for(let j=0;j<colors;j++)
+		{sumR+=colors[i].sumR;
+		sumG+=colors[i].sumG;
+		sumB+=colors[i].sumB;
+		}
 
-for(let i=0;i<colors.length-10;i++)//同样的道理，对于8种颜色的波长波的混合也应当涂抹或插值，现实中的白光有无数条不同波长波的叠加
+	sumR/=colors.length;
+	sumG/=colors.length;
+	sumB/=colors.length;
+avgs={avgR:sumR,avgG:sumG,avgB:sumB};
+}	
+for(let i=0;i<colors.length;i++)
+{colors.sumR=colors.sumR/avgs.avgR*255;
+	colors.sumG=colors.sumG/avgs.avgG*255;
+	colors.sumB=colors.sumB/avgs.avgB*255;
+}	
+	
+	
+for(let i=0;i<colors.length-5;i++)//同样的道理，对于8种颜色的波长波的混合也应当涂抹或插值，现实中的白光有无数条不同波长波的叠加
 	{
 		let sumR=0;let sumG=0;let sumB=0;
 		for(let j=0;j<10;j++)
@@ -194,8 +215,8 @@ for(let i=0;i<colors.length-10;i++)//同样的道理，对于8种颜色的波长
 		sumG+=colors[i+j].sumG;
 		sumB+=colors[i+j].sumB;
 		}
-		sumR/=10;sumG/=10;sumB/=10;
-		for(let j=0;j<10;j++)
+		sumR/=5;sumG/=5;sumB/=5;
+		for(let j=0;j<5;j++)
 		colors[i+j]={sumR,sumG,sumB};
 	}
 
