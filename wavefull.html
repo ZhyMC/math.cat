@@ -1,0 +1,225 @@
+
+
+<html>
+
+<head>
+<title>夫琅禾费衍射实验</title>
+	<script>
+
+var L=25;
+
+var RStrong=1;
+var GStrong=1;
+var BStrong=1;
+
+var WIDTH=500;
+
+function I(theta,lambda,L,A){
+
+var r1=0;
+var r2=0;
+
+var A1=1;
+var A2=1;
+//var lambda=1;//红:0.691,绿:0.534,蓝:0.442
+
+console.log(lambda,L,A)
+
+var s=0;
+//var L=25;
+
+while(s<L){
+s+=0.01;
+r2=s*Math.sin(theta);
+
+let A1_tmp=Math.sqrt(A1*A1+A2*A2+2*A1*A2*Math.cos(2*3.14*(r1-r2)/lambda));
+let r1_tmp=(-lambda/(2*3.14))*Math.abs(Math.atan((A1*Math.sin(-2*3.14/lambda*r1)+A2*Math.sin(-2*3.14/lambda*r2))/(A1*Math.cos(-2*3.14/lambda*r1)+A2*Math.cos(-2*3.14/lambda*r2))))
+
+A1=A1_tmp;
+r1=r1_tmp;
+//console.log(A1,r1,r2);
+
+}
+return A1*A1;
+
+}
+
+function createColorSet(ld){
+var arr=[];var arrsum=0;
+
+var h={
+'r':{ld:0.691,S:RStrong},
+'g':{ld:0.534,S:GStrong},
+'b':{ld:0.442,S:BStrong}
+}
+for(let i=0;i<=1;i+=1/WIDTH){
+
+	arr.push(I(Math.asin(i),ld/100,L,1));
+	}
+
+let stay=3;
+for(let i=0;i<arr.length-stay;i++)
+	{
+		//这样算出来的光线是一条条离散的，而实际上光线是连续的,
+		//而计算机的要模拟连续需要生成非常多的线,为了模拟连续,这里使用一招,周围平均法,模糊化每stay条光线
+		let sum=0;
+		for(let j=0;j<stay;j++)
+		sum+=arr[i+j];
+		sum/=stay;
+		for(let j=0;j<stay;j++)
+		arr[i+j]=sum;
+	}
+	
+for(var i in arr)
+	arrsum+=arr[i];
+
+var avg=arrsum/arr.length;
+
+var div=[];
+for(var i in arr)
+div[i]=(arr[i]/avg)>1?1:(arr[i]/avg);
+
+
+return {arr,avg,div};
+}
+
+
+
+
+function lambdaToColor(lambda, gamma, intensityMax) {
+	if (typeof(gamma)=='undefined') {
+		gamma = 0.8; // double
+	}
+	if (typeof(intensityMax)=='undefined') {
+		intensityMax = 255.0; // double
+	}
+    var r, g, b, alpha; // double
+    if (lambda >= 380.0 && lambda < 440.0) {
+        r = -1.0 * (lambda - 440.0) / (440.0 - 380.0);
+        g = 0.0;
+        b = 1.0;
+    }else if (lambda >= 440.0 && lambda < 490.0) {
+        r = 0.0;
+        g = (lambda - 440.0) / (490.0 - 440.0);
+        b = 1.0;
+    }else if (lambda >= 490.0 && lambda < 510.0) {
+        r = 0.0;
+        g = 1.0;
+        b = -1.0 * (lambda - 510.0) / (510.0 - 490.0);
+    }else if (lambda >= 510.0 && lambda < 580.0) {
+        r = (lambda - 510.0) / (580.0 - 510.0);
+        g = 1.0;
+        b = 0.0;
+    }else if (lambda >= 580.0 && lambda < 645.0) {
+        r = 1.0;
+        g = -1.0 * (lambda - 645.0) / (645.0 - 580.0);
+        b = 0.0;
+    }else if (lambda >= 645.0 && lambda <= 780.0) {
+        r = 1.0;
+        g = 0.0;
+        b = 0.0;
+    }else {
+        r = 0.0;
+        g = 0.0;
+        b = 0.0;
+    }
+	// 在可见光谱的边缘处强度较低。
+    if (lambda >= 380.0 && lambda < 420.0) {
+        alpha = 0.30 + 0.70 * (lambda - 380.0) / (420.0 - 380.0);
+    }else if (lambda >= 420.0 && lambda < 701.0) {
+        alpha = 1.0;
+    }else if (lambda >= 701.0 && lambda < 780.0) {
+        alpha = 0.30 + 0.70 * (780.0 - lambda) / (780.0 - 700.0);
+    }else {
+        alpha = 0.0;
+    }
+	// 1953年在引入NTSC电视时,计算具有荧光体的监视器的亮度公式如下
+    var Y = (0.212671*r + 0.715160*g + 0.072169*b); // Math.round
+	// 伽马射线 gamma
+    // 照明强度 intensityMax
+    var R = r == 0.0 ? 0 : Math.round(intensityMax * Math.pow(r * alpha, gamma));
+    var G = g == 0.0 ? 0 : Math.round(intensityMax * Math.pow(g * alpha, gamma));
+    var B = b == 0.0 ? 0 : Math.round(intensityMax * Math.pow(b * alpha, gamma));
+    var A = (alpha); // Math.round
+	// return
+    return {r:R*A, g:G*A, b:B*A};
+}
+ 
+function load(){
+
+var set=[];var colors=[];
+for(let i=380;i<780;i+=100)
+set.push({lmd:i,s:createColorSet(ld)});
+for(let i=0;i<set[0].s.div.length;i++)
+{
+let sumR=0;let sumG=0;let sumB=0;
+for(let j=0;j<set.length;j++)
+{
+let co=lambdaToColor(set[j].lmd);
+sumR+=set[j].s.div[i]*co.r;
+sumG+=set[j].s.div[i]*co.g;
+sumB+=set[j].s.div[i]*co.b;
+}
+sumR/=set.length;
+sumG/=set.length;
+sumB/=set.length;
+colors[i]={sumR,sumG,sumB};
+}
+
+console.log(colors);
+var width=setR.arr.length;
+
+var center=parseInt(width/2);
+//var canvas = createCanvas(width,width);
+var canvas = document.getElementById("cv");
+canvas.width=width;canvas.height=width;
+canvas.style.height=width+"px";
+canvas.style.width=width+"px";
+
+//console.log(putRGBA(tmp1.r,tmp1.g,tmp1.b,tmp1.a,0,0,255,setB.div[0]),setR.div[0],setG.div[0],setB.div[0]);
+
+
+var ctx = canvas.getContext('2d');
+ctx.fillStyle="#000";
+ctx.fillRect(0,0,width,width)
+for(let i=0;i<setR.arr.length;i++)
+{
+	
+	ctx.beginPath();
+			//由于人的视觉,无论中心点有多亮,光强有多大,都可以看到周围暗淡的光圈,
+					//所以人视觉认为的明暗程度,应当是光强与可视区域内光强总平均值之间的比值
+					//这也可以解释为什么人从明亮到黑暗处,适应一段时间就能看的更清晰,这时候人体还在调节光强总平均值
+	
+
+ctx.strokeStyle="rgba("+parseInt(setR.div[i]*255)+","+parseInt(setG.div[i]*255)+","+parseInt(setB.div[i]*255)+")";
+ctx.lineWidth=3;
+	ctx.arc(center,center,i,0,Math.PI*2);
+ctx.closePath();
+ctx.stroke();
+
+}
+
+}
+
+
+
+</script>
+</head>
+<body>
+<center>
+<canvas width=100 height=100 style="height:100px;width:100px;" id="cv"></canvas>
+</center>
+<center style="margin-top:10px;">
+<input type="range" value=500 min="200" max="2000" onchange="WIDTH=parseInt(this.value);document.getElementById('x').innerText=this.value;" step="100">渲染尺寸</input>
+<span id="x">500</span>
+
+<input type="range" value=25 min="0" max="50" onchange="L=parseInt(this.value);document.getElementById('d').innerText=this.value;" step="1">圆孔直径</input>
+<span id="d">25</span>
+
+<center><button style="height:50px;width:200px;font-size:24px;margin-top:10px;" onclick="this.disabled='disabled';this.innerText='生成中...';setTimeout(()=>{load();this.disabled='';this.innerText='生成';},1);">生成</button></center>
+</center>
+<center><image style="margin-top:20px;" width=500 height=250 src="pic.png"></image></center>
+
+<center style="margin-top:40px">出品单位：阳光学院大学物理实验中心</center>
+</body>
+</html>
