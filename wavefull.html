@@ -60,11 +60,12 @@ var h=[
 ]
 for(var light in h)
 {
+console.log(light)
 	var arr=[];var arrsum=0;
 
 	for(let i=0;i<=1;i+=1/WIDTH){
-console.log(light)
-	arr.push(I(Math.asin(i),light.ld/100,L,1));
+		
+	arr.push(I(Math.asin(i),light.ld,L,1));
 	}
 
 let stay=3;
