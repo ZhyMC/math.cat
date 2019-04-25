@@ -89,6 +89,24 @@ var setR=createColorSet('r');
 var setG=createColorSet('g');
 var setB=createColorSet('b');
 
+	
+for(let i=0;i<setR.div.length-6;i++)//同样的道理，对于3种颜色的波长波的混合也应当涂抹或插值，现实中的白光有无数条不同波长波的叠加
+	{
+		let sumR=0;let sumG=0;let sumB=0;
+		for(let j=0;j<6;j++)
+		{sumR+=setR.div[i+j];
+		sumG+=setG.div[i+j];
+		sumB+=setB.div[i+j];
+		}
+		sumR/=6;sumG/=6;sumB/=6;
+		for(let j=0;j<6;j++)
+		{
+		setR.div[i+j]=sumR;
+		setG.div[i+j]=sumG;
+		setB.div[i+j]=sumB;
+			
+		}
+	}
 
 
 
