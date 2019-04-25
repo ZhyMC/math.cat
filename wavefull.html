@@ -205,16 +205,16 @@ for(let i=0;i<colors.length;i++)
 }	
 	
 	
-for(let i=0;i<colors.length-3;i++)//同样的道理，对于8种颜色的波长波的混合也应当涂抹或插值，现实中的白光有无数条不同波长波的叠加
+for(let i=0;i<colors.length-6;i++)//同样的道理，对于8种颜色的波长波的混合也应当涂抹或插值，现实中的白光有无数条不同波长波的叠加
 	{
 		let sumR=0;let sumG=0;let sumB=0;
-		for(let j=0;j<3;j++)
+		for(let j=0;j<6;j++)
 		{sumR+=colors[i+j].sumR;
 		sumG+=colors[i+j].sumG;
 		sumB+=colors[i+j].sumB;
 		}
-		sumR/=3;sumG/=3;sumB/=3;
-		for(let j=0;j<3;j++)
+		sumR/=6;sumG/=6;sumB/=6;
+		for(let j=0;j<6;j++)
 		colors[i+j]={sumR,sumG,sumB};
 	}
 
