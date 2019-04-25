@@ -44,17 +44,27 @@ return A1*A1;
 
 }
 
-function createColorSet(ld){
-var arr=[];var arrsum=0;
+function createColorSet(){
+var res=[];
 
-var h={
-'r':{ld:0.691,S:RStrong},
-'g':{ld:0.534,S:GStrong},
-'b':{ld:0.442,S:BStrong}
-}
-for(let i=0;i<=1;i+=1/WIDTH){
+var h=[
+{ld:645,r:255,g:0,b:0},
+{ld:618,r:255,g:128,b:0},
+{ld:580,r:255,g:255,b:0},
+{ld:540,r:128,g:255,b:0},
+{ld:490,r:0,g:255,b:255},
+{ld:461,r:0,g:128,b:255},
+{ld:440,r:0,g:0,b:255},
+{ld:420,r:128,g:0,b:255},
 
-	arr.push(I(Math.asin(i),ld/100,L,1));
+]
+for(var light in h)
+{
+	var arr=[];var arrsum=0;
+
+	for(let i=0;i<=1;i+=1/WIDTH){
+
+	arr.push(I(Math.asin(i),light.ld/100,L,1));
 	}
 
 let stay=3;
@@ -80,7 +90,10 @@ for(var i in arr)
 div[i]=(arr[i]/avg)>1?1:(arr[i]/avg);
 
 
-return {arr,avg,div};
+res.push({light,arr,avg,div});
+
+}
+	return res;
 }
 
 
@@ -147,18 +160,16 @@ function lambdaToColor(lambda, gamma, intensityMax) {
  
 function load(){
 
-var set=[];var colors=[];
-for(let i=380;i<=780;i+=199)
-set.push({lmd:i,s:createColorSet(i)});
-for(let i=0;i<set[0].s.div.length;i++)
+var set=createColorSet();var colors=[];
+	
+for(let i=0;i<set[0].div.length;i++)
 {
 let sumR=0;let sumG=0;let sumB=0;
 for(let j=0;j<set.length;j++)
 {
-let co=lambdaToColor(set[j].lmd);
-sumR+=set[j].s.div[i]*co.r;
-sumG+=set[j].s.div[i]*co.g;
-sumB+=set[j].s.div[i]*co.b;
+sumR+=set[j].div[i]*set[j].light.r;
+sumG+=set[j].div[i]*set[j].light.g;
+sumB+=set[j].div[i]*set[j].light.b;
 }
 sumR/=set.length;
 sumG/=set.length;
