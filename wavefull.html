@@ -148,7 +148,7 @@ function lambdaToColor(lambda, gamma, intensityMax) {
 function load(){
 
 var set=[];var colors=[];
-for(let i=380;i<780;i+=100)
+for(let i=380;i<=780;i+=50)
 set.push({lmd:i,s:createColorSet(i)});
 for(let i=0;i<set[0].s.div.length;i++)
 {
@@ -160,10 +160,10 @@ sumR+=set[j].s.div[i]*co.r;
 sumG+=set[j].s.div[i]*co.g;
 sumB+=set[j].s.div[i]*co.b;
 }
-sumR/=set.length;
-sumG/=set.length;
-sumB/=set.length;
-colors[i]={sumR*1.2,sumG*1.2,sumB*1.2};
+sumR/=set.length/0.5;
+sumG/=set.length/0.5;
+sumB/=set.length/0.5;
+colors[i]={sumR,sumG,sumB};
 }
 
 console.log(colors);
