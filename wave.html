@@ -1,0 +1,147 @@
+
+<html>
+
+<head>
+<script>
+
+var L=25;
+
+var RStrong=1;
+var GStrong=1;
+var BStrong=1;
+
+function I(theta,lambda,L,A){
+
+var r1=0;
+var r2=0;
+
+var A1=1;
+var A2=1;
+//var lambda=1;//红:0.691,绿:0.534,蓝:0.442
+
+console.log(lambda,L,A)
+
+var s=0;
+//var L=25;
+
+while(s<L){
+s+=0.01;
+r2=s*Math.sin(theta);
+
+let A1_tmp=Math.sqrt(A1*A1+A2*A2+2*A1*A2*Math.cos(2*3.14*(r1-r2)/lambda));
+let r1_tmp=(-lambda/(2*3.14))*Math.abs(Math.atan((A1*Math.sin(-2*3.14/lambda*r1)+A2*Math.sin(-2*3.14/lambda*r2))/(A1*Math.cos(-2*3.14/lambda*r1)+A2*Math.cos(-2*3.14/lambda*r2))))
+
+A1=A1_tmp;
+r1=r1_tmp;
+//console.log(A1,r1,r2);
+
+}
+return A1*A1;
+
+}
+
+function createColorSet(name){
+var arr=[];var arrsum=0;
+
+var h={
+'r':{ld:0.691,S:RStrong},
+'g':{ld:0.534,S:GStrong},
+'b':{ld:0.442,S:BStrong}
+}
+for(let i=0;i<=1;i+=0.002){
+
+	arr.push(I(Math.asin(i),h[name].ld,L,h[name].S));
+	}
+
+let stay=3;
+for(let i=0;i<arr.length-stay;i++)
+	{
+		//这样算出来的光线是一条条离散的，而实际上光线是连续的,
+		//而计算机的要模拟连续需要生成非常多的线,为了模拟连续,这里使用一招,周围平均法,模糊化每stay条光线
+		let sum=0;
+		for(let j=0;j<stay;j++)
+		sum+=arr[i+j];
+		sum/=stay;
+		for(let j=0;j<stay;j++)
+		arr[i+j]=sum;
+	}
+	
+for(var i in arr)
+	arrsum+=arr[i];
+
+var avg=arrsum/arr.length/h[name].S;
+
+var div=[];
+for(var i in arr)
+div[i]=(arr[i]/avg)>1?1:(arr[i]/avg);
+
+return {arr,avg,div};
+}
+
+
+function load(){
+
+var setR=createColorSet('r');
+var setG=createColorSet('g');
+var setB=createColorSet('b');
+
+
+
+
+var width=setR.arr.length;
+
+var center=parseInt(width/2);
+//var canvas = createCanvas(width,width);
+var canvas = document.getElementById("cv");
+canvas.width=width;canvas.height=width;
+canvas.style.height=width+"px";
+canvas.style.width=width+"px";
+
+//console.log(putRGBA(tmp1.r,tmp1.g,tmp1.b,tmp1.a,0,0,255,setB.div[0]),setR.div[0],setG.div[0],setB.div[0]);
+
+
+var ctx = canvas.getContext('2d');
+ctx.fillStyle="#000";
+ctx.fillRect(0,0,width,width)
+for(let i=0;i<setR.arr.length;i++)
+{
+	
+	ctx.beginPath();
+			//由于人的视觉,无论中心点有多亮,光强有多大,都可以看到周围暗淡的光圈,
+					//所以人视觉认为的明暗程度,应当是光强与可视区域内光强总平均值之间的比值
+					//这也可以解释为什么人从明亮到黑暗处,适应一段时间就能看的更清晰,这时候人体还在调节光强总平均值
+	
+
+ctx.strokeStyle="rgba("+parseInt(setR.div[i]*255)+","+parseInt(setG.div[i]*255)+","+parseInt(setB.div[i]*255)+")";
+ctx.lineWidth=3;
+	ctx.arc(center,center,i,0,Math.PI*2);
+ctx.closePath();
+ctx.stroke();
+
+}
+
+}
+
+
+
+</script>
+</head>
+<body>
+<center>
+<canvas width=100 height=100 style="height:100px;width:100px;" id="cv"></canvas>
+</center>
+<center style="margin-top:10px;">
+<input type="range" value=25 min="0" max="50" onchange="L=parseInt(this.value);document.getElementById('d').innerText=this.value;" step="1">圆孔直径</input>
+<span id="d">25</span>
+<input type="range" value=1 min="0" max="20" onchange="RStrong=parseInt(this.value);document.getElementById('rs').innerText=this.value;" step="1">红色光的强度</input>
+<span id="rs">1</span>
+<input type="range" value=1 min="0" max="20" onchange="GStrong=parseInt(this.value);document.getElementById('gs').innerText=this.value;" step="1">绿色光的强度</input>
+<span id="gs">1</span>
+<input type="range" value=1 min="0" max="20" onchange="BStrong=parseInt(this.value);document.getElementById('bs').innerText=this.value;" step="1">蓝色光的强度</input>
+<span id="bs">1</span>
+<center><button style="height:50px;width:200px;font-size:24px;margin-top:10px;" onclick="this.disabled='disabled';this.innerText='生成中...';setTimeout(()=>{load();this.disabled='';this.innerText='生成';},1);">生成</button></center>
+</center>
+<center><image style="margin-top:20px;" width=500 height=250 src="file:///C:/Users/1/Pictures/pic.png"></image></center>
+
+</body>
+</html>
