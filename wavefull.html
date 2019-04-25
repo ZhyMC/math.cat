@@ -167,7 +167,7 @@ colors[i]={sumR,sumG,sumB};
 }
 
 console.log(colors);
-var width=setR.arr.length;
+var width=set[0].s.div.length;
 
 var center=parseInt(width/2);
 //var canvas = createCanvas(width,width);
@@ -182,7 +182,7 @@ canvas.style.width=width+"px";
 var ctx = canvas.getContext('2d');
 ctx.fillStyle="#000";
 ctx.fillRect(0,0,width,width)
-for(let i=0;i<setR.arr.length;i++)
+for(let i=0;i<width;i++)
 {
 	
 	ctx.beginPath();
