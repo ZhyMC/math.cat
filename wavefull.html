@@ -184,6 +184,21 @@ let we=255/Math.max(sumR,sumG,sumB);
 	
 colors[i]={sumR,sumG,sumB};
 }
+	
+
+for(let i=0;i<colors.length-3;i++)//同样的道理，对于8种颜色的波长波的混合也应当涂抹或插值，现实中的白光有无数条不同波长波的叠加
+	{
+		let sumR=0;let sumG=0;let sumB=0;
+		for(let j=0;j<3;j++)
+		{sumR+=colors[i+j].sumR;
+		sumG+=colors[i+j].sumG;
+		sumB+=colors[i+j].sumB;
+		}
+		sumR/=3;sumG/=3;sumB/=3;
+		for(let j=0;j<3;j++)
+		colors[i+j]={sumR,sumG,sumB};
+	}
+
 
 console.log(colors);
 var width=set[0].div.length;
