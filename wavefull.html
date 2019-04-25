@@ -189,15 +189,16 @@ colors[i]={sumR,sumG,sumB};
 var avgs={avgR:0,avgG:0,avgB:0};let sumR=0;let sumG=0;let sumB=0;
 for(let i=0;i<colors.length;i++){//使用人眼对比值理论处理
 sumR+=colors[i].sumR;
-		sumG+=colors[i].sumG;
-		sumB+=colors[i].sumB;
-
-
+sumG+=colors[i].sumG;
+sumB+=colors[i].sumB;
+}
 	sumR/=colors.length;
 	sumG/=colors.length;
 	sumB/=colors.length;
-}avgs={avgR:sumR,avgG:sumG,avgB:sumB};
+	avgs={avgR:sumR,avgG:sumG,avgB:sumB};
 
+	
+	
 for(let i=0;i<colors.length;i++)
 {colors[i].sumR=colors[i].sumR/avgs.avgR*255;
 	colors[i].sumG=colors[i].sumG/avgs.avgG*255;
