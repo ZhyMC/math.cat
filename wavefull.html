@@ -160,9 +160,15 @@ sumR+=set[j].s.div[i]*co.r;
 sumG+=set[j].s.div[i]*co.g;
 sumB+=set[j].s.div[i]*co.b;
 }
-//sumR/=set.length/0.5;
-//sumG/=set.length/0.5;
-//sumB/=set.length/0.5;
+sumR/=set.length;
+sumG/=set.length;
+sumB/=set.length;
+let we=255/Math.max(avgR,avgG,avgB);
+sumR*=we;
+sumG*=we;
+sumB*=we;
+	
+	
 colors[i]={sumR,sumG,sumB};
 }
 
