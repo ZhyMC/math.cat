@@ -87,7 +87,8 @@ var avg=arrsum/arr.length;
 
 var div=[];
 for(var i in arr)
-div[i]=(arr[i]/avg)>1?1:(arr[i]/avg);
+//div[i]=(arr[i]/avg)>1?1:(arr[i]/avg);
+div[i]=(arr[i]/avg);
 
 
 res.push({light:h[light],arr,avg,div});
