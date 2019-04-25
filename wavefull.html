@@ -192,9 +192,9 @@ sumR+=colors[i].sumR;
 sumG+=colors[i].sumG;
 sumB+=colors[i].sumB;
 }
-	sumR/=colors.length/RStrong;
-	sumG/=colors.length/GStrong;
-	sumB/=colors.length/BStrong;
+	sumR/=colors.length*RStrong;
+	sumG/=colors.length*GStrong;
+	sumB/=colors.length*BStrong;
 	avgs={avgR:sumR,avgG:sumG,avgB:sumB};
 
 	
