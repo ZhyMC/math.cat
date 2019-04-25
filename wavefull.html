@@ -60,12 +60,11 @@ var h=[
 ]
 for(var light in h)
 {
-console.log(light)
 	var arr=[];var arrsum=0;
 
 	for(let i=0;i<=1;i+=1/WIDTH){
 		
-	arr.push(I(Math.asin(i),light.ld,L,1));
+	arr.push(I(Math.asin(i),h[light].ld/100,L,1));
 	}
 
 let stay=3;
@@ -91,7 +90,7 @@ for(var i in arr)
 div[i]=(arr[i]/avg)>1?1:(arr[i]/avg);
 
 
-res.push({light,arr,avg,div});
+res.push({light:h[light],arr,avg,div});
 
 }
 	return res;
