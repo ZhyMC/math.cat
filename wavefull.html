@@ -231,7 +231,7 @@ ctx.stroke();
 <input type="range" value=500 min="200" max="2000" onchange="WIDTH=parseInt(this.value);document.getElementById('x').innerText=this.value;" step="100">渲染尺寸</input>
 <span id="x">500</span>
 
-<input type="range" value=25 min="0" max="50" onchange="L=parseInt(this.value);document.getElementById('d').innerText=this.value;" step="1">圆孔直径</input>
+<input type="range" value=25 min="0" max="200" onchange="L=parseInt(this.value);document.getElementById('d').innerText=this.value;" step="1">圆孔直径</input>
 <span id="d">25</span>
 
 <center><button style="height:50px;width:200px;font-size:24px;margin-top:10px;" onclick="this.disabled='disabled';this.innerText='生成中...';setTimeout(()=>{load();this.disabled='';this.innerText='生成';},1);">生成</button></center>
