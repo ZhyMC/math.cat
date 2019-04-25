@@ -201,9 +201,9 @@ for(let j=0;j<colors;j++)
 avgs={avgR:sumR,avgG:sumG,avgB:sumB};
 }	
 for(let i=0;i<colors.length;i++)
-{colors.sumR=colors.sumR/avgs.avgR*255;
-	colors.sumG=colors.sumG/avgs.avgG*255;
-	colors.sumB=colors.sumB/avgs.avgB*255;
+{colors[i].sumR=colors[i].sumR/avgs.avgR*255;
+	colors[i].sumG=colors[i].sumG/avgs.avgG*255;
+	colors[i].sumB=colors[i].sumB/avgs.avgB*255;
 }	
 	
 	
@@ -222,6 +222,7 @@ for(let i=0;i<colors.length-5;i++)//同样的道理，对于8种颜色的波长�
 
 
 console.log(colors);
+	
 var width=set[0].div.length;
 
 var center=parseInt(width/2);
