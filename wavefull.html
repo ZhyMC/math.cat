@@ -62,7 +62,7 @@ for(var light in h)
 {
 	var arr=[];var arrsum=0;
 
-	for(let i=0;i<=1;i+=1/(WIDTH/2)){
+	for(let i=0;i<=1;i+=1/WIDTH){
 		
 	arr.push(I(Math.asin(i),h[light].ld/100,L,1));
 	}
@@ -223,19 +223,19 @@ console.log(colors);
 	
 var width=set[0].div.length;
 
-var center=parseInt(width/2);
+var center=width;
 //var canvas = createCanvas(width,width);
 var canvas = document.getElementById("cv");
-canvas.width=width;canvas.height=width;
-canvas.style.height=width+"px";
-canvas.style.width=width+"px";
+canvas.width=width*2;canvas.height=width*2;
+canvas.style.height*2=width*2+"px";
+canvas.style.width*2=width*2+"px";
 
 //console.log(putRGBA(tmp1.r,tmp1.g,tmp1.b,tmp1.a,0,0,255,setB.div[0]),setR.div[0],setG.div[0],setB.div[0]);
 
 
 var ctx = canvas.getContext('2d');
 ctx.fillStyle="#000";
-ctx.fillRect(0,0,width,width)
+ctx.fillRect(0,0,width*2,width*2)
 for(let i=0;i<width;i++)
 {
 	
