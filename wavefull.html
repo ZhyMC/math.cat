@@ -192,12 +192,11 @@ sumR+=colors[i].sumR;
 sumG+=colors[i].sumG;
 sumB+=colors[i].sumB;
 }
-	sumR/=colors.length;
-	sumG/=colors.length;
-	sumB/=colors.length;
+	sumR/=colors.length/RStrong;
+	sumG/=colors.length/GStrong;
+	sumB/=colors.length/BStrong;
 	avgs={avgR:sumR,avgG:sumG,avgB:sumB};
 
-	
 	
 for(let i=0;i<colors.length;i++)
 {colors[i].sumR=colors[i].sumR/avgs.avgR*255;
@@ -270,6 +269,13 @@ ctx.stroke();
 
 <input type="range" value=25 min="0" max="200" onchange="L=parseInt(this.value);document.getElementById('d').innerText=this.value;" step="1">圆孔直径</input>
 <span id="d">25</span>
+
+<input type="range" value=1 min="0" max="20" onchange="RStrong=parseInt(this.value);document.getElementById('rs').innerText=this.value;" step="1">红色光的强度</input>
+<span id="rs">1</span>
+<input type="range" value=1 min="0" max="20" onchange="GStrong=parseInt(this.value);document.getElementById('gs').innerText=this.value;" step="1">绿色光的强度</input>
+<span id="gs">1</span>
+<input type="range" value=1 min="0" max="20" onchange="BStrong=parseInt(this.value);document.getElementById('bs').innerText=this.value;" step="1">蓝色光的强度</input>
+<span id="bs">1</span>
 
 <center><button style="height:50px;width:200px;font-size:24px;margin-top:10px;" onclick="this.disabled='disabled';this.innerText='生成中...';setTimeout(()=>{load();this.disabled='';this.innerText='生成';},1);">生成</button></center>
 </center>
