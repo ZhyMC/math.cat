@@ -207,20 +207,20 @@ for(let i=0;i<colors.length;i++)
 	colors[i].sumB=colors[i].sumB/avgs.avgB*255;
 }	
 	
-	
+/*	
 for(let i=0;i<colors.length-6;i+=1)//同样的道理，对于8种颜色的波长波的混合也应当涂抹或插值，现实中的白光有无数条不同波长波的叠加
 	{
 		let sumR=0;let sumG=0;let sumB=0;
-		for(let j=0;j<6;j++)
+		for(let j=0;j<3;j++)
 		{sumR+=colors[i+j].sumR;
 		sumG+=colors[i+j].sumG;
 		sumB+=colors[i+j].sumB;
 		}
-		sumR/=6;sumG/=6;sumB/=6;
-		for(let j=0;j<6;j++)
+		sumR/=3;sumG/=3;sumB/=3;
+		for(let j=0;j<3;j++)
 		colors[i+j]={sumR,sumG,sumB};
 	}
-
+*/
 
 console.log(colors);
 	
@@ -270,8 +270,8 @@ ctx.stroke();
 <input type="range" value=500 min="200" max="2000" onchange="WIDTH=parseInt(this.value);document.getElementById('x').innerText=this.value*2;" step="50">渲染尺寸</input>
 <span id="x">1000</span>
 
-<input type="range" value=35 min="0" max="200" onchange="L=parseInt(this.value);document.getElementById('d').innerText=this.value;" step="1">圆孔直径</input>
-<span id="d">35</span>
+<input type="range" value=56 min="0" max="200" onchange="L=parseInt(this.value);document.getElementById('d').innerText=this.value;" step="1">圆孔直径</input>
+<span id="d">56</span>
 
 <input type="range" value=1 min="0" max="20" onchange="RStrong=parseInt(this.value);document.getElementById('rs').innerText=this.value;" step="1">红色光的强度</input>
 <span id="rs">1</span>
