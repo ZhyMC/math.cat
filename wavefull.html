@@ -191,7 +191,7 @@ for(let i=0;i<setR.arr.length;i++)
 					//这也可以解释为什么人从明亮到黑暗处,适应一段时间就能看的更清晰,这时候人体还在调节光强总平均值
 	
 
-ctx.strokeStyle="rgba("+parseInt(setR.div[i]*255)+","+parseInt(setG.div[i]*255)+","+parseInt(setB.div[i]*255)+")";
+ctx.strokeStyle="rgb("+parseInt(colors[i].sumR)+","+parseInt(colors[i].sumG)+","+parseInt(colors[i].sumB)+")";
 ctx.lineWidth=3;
 	ctx.arc(center,center,i,0,Math.PI*2);
 ctx.closePath();
