@@ -55,7 +55,7 @@ var h=[
 {ld:490,r:0,g:255,b:255},
 {ld:461,r:0,g:128,b:255},
 {ld:440,r:0,g:0,b:255},
-{ld:420,r:128,g:0,b:255},
+{ld:420,r:106,g:0,b:255},
 
 ]
 for(var light in h)
@@ -267,8 +267,8 @@ ctx.stroke();
 <input type="range" value=250 min="200" max="2000" onchange="WIDTH=parseInt(this.value);document.getElementById('x').innerText=this.value*2;" step="100">渲染尺寸</input>
 <span id="x">500</span>
 
-<input type="range" value=25 min="0" max="200" onchange="L=parseInt(this.value);document.getElementById('d').innerText=this.value;" step="1">圆孔直径</input>
-<span id="d">25</span>
+<input type="range" value=26 min="0" max="200" onchange="L=parseInt(this.value);document.getElementById('d').innerText=this.value;" step="1">圆孔直径</input>
+<span id="d">26</span>
 
 <input type="range" value=1 min="0" max="20" onchange="RStrong=parseInt(this.value);document.getElementById('rs').innerText=this.value;" step="1">红色光的强度</input>
 <span id="rs">1</span>
