@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+  <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+ 
+<style>
+body{
+background:#EEE;
+}
+#welcome{
+text-align:center;
+margin-top:10%;
+}
+#welcome img{
+width:200px;
+height:200px;
+}
+#welcome #logo{
+margin-bottom:50px;
+}
+#welcome #card{
+width:300px;
+padding:30px;
+display:inline-block;
+
+}
+#welcome #password{
+margin-bottom:30px;
+background-color:#FFF;
+}
+#welcome #password input{
+text-align:center;
+}
+</style>
+
+</head>
+
+<body>
+
+	<div id="welcome">	
+		<div id="card" class="mdc-card">
+		<div id="logo"><img src="schoolbus.svg"></img></div>
+		
+		<div id="enter">
+	<div id="password" class="mdc-text-field">
+  <input id="pswd" type="password" id="my-text-field" class="mdc-text-field__input">
+  <label class="mdc-floating-label" for="my-text-field">请输入口令</label>
+  <div class="mdc-line-ripple"></div>
+</div>
+
+		<button id="enterbut" class="mdc-button mdc-button--outlined"> <i class="material-icons mdc-button__icon">fingerprint</i><span class="mdc-button__label">进入校车管理系统</span></button>
+		</div>
+		</div>
+	</div>
+	
+</body>
+
+<script>
+function setCookie(c_name,value,expiredays)
+{
+var exdate=new Date()
+exdate.setDate(exdate.getDate()+expiredays)
+document.cookie=c_name+ "=" +escape(value)+
+((expiredays==null) ? "" : ";expires="+exdate.toGMTString())
+}
+
+var $=(c)=>document.querySelector(c);
+
+
+mdc.textField.MDCTextField.attachTo($('.mdc-text-field'));
+mdc.ripple.MDCRipple.attachTo($('.mdc-button'));
+
+$("#enterbut").onclick=()=>{
+setCookie("password",$("#pswd").value);
+window.location.href="manage.htm";
+}
+
+</script>
+
+ </html>
