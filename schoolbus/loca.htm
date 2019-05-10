@@ -27,6 +27,19 @@
 		zoom:15,
 		  mapTypeId: qq.maps.MapTypeId.ROADMAP
     });
+	var overlays=[];
+	
+	function clearAll(){
+	for(var i in overlays)
+	{
+	overlays[i].marker.setMap(null);
+	overlays[i].label.setMap(null);
+	
+	}
+	
+	overlays=[];
+	
+	}
     function createMarker(lat,lon,title){
 		var marker = new qq.maps.Marker({
     position: new qq.maps.LatLng(lat,lon),
@@ -41,13 +54,14 @@
     map: map,
     content:title
 	})
+	
 return {marker,label};
 	}
 
 function refresh(){
 fetch("https://abus.xysbs.cn:8080/ALLINFO").then((ret)=>ret.json()).then((obj)=>{
 for(var i in obj.businfo)
-	createMarker(obj.businfo[i].lat,obj.businfo[i].lon,obj.businfo[i].strinfo);
+overlays.push(createMarker(obj.businfo[i].lat,obj.businfo[i].lon,obj.businfo[i].strinfo));
 	
 })
 
