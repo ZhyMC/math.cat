@@ -34,7 +34,6 @@
 	{
 	overlays[i].marker.setMap(null);
 	overlays[i].label.setMap(null);
-	
 	}
 	
 	overlays=[];
@@ -59,7 +58,9 @@ return {marker,label};
 	}
 
 function refresh(){
+
 fetch("https://abus.xysbs.cn:8080/ALLINFO").then((ret)=>ret.json()).then((obj)=>{
+clearAll();
 for(var i in obj.businfo)
 overlays.push(createMarker(obj.businfo[i].lat,obj.businfo[i].lon,obj.businfo[i].strinfo));
 	
