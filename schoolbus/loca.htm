@@ -1,0 +1,60 @@
+<html>
+<head>
+ <!--<script src="mdc/material-components-web.min.js"></script>
+  <link href="mdc/material-components-web.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">-->
+ <script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=DJ5BZ-WTFAI-TRGGF-5T33C-OJVKJ-IRB5Z"></script>
+
+ <style>
+ 
+ #container{
+ position:absolute;
+ left:0;
+ top:0;
+ bottom:0;
+ right:0;
+ }
+ </style>
+</head>
+<body>
+
+<div id="container"></div>
+</body>
+<script>
+	var map = new qq.maps.Map(document.getElementById("container"), {
+        // 地图的中心地理坐标。
+        center: new qq.maps.LatLng(25.994773,119.454002),
+		zoom:15,
+		  mapTypeId: qq.maps.MapTypeId.ROADMAP
+    });
+    function createMarker(lat,lon,title){
+		var marker = new qq.maps.Marker({
+    position: new qq.maps.LatLng(lat,lon),
+    map: map,
+    title:title
+	});
+	
+	marker.setIcon(new qq.maps.MarkerImage("driving.png",new qq.maps.Size(50,50),undefined,undefined,new qq.maps.Size(50,50)))
+	
+	var label=new qq.maps.Label({
+	position: new qq.maps.LatLng(lat,lon),
+    map: map,
+    content:title
+	})
+return {marker,label};
+	}
+
+function refresh(){
+fetch("https://abus.xysbs.cn:8080/ALLINFO").then((ret)=>ret.json()).then((obj)=>{
+for(var i in obj.businfo)
+	createMarker(obj.businfo[i].lat,obj.businfo[i].lon,obj.businfo[i].strinfo);
+	
+})
+
+}
+
+setInterval(refresh,3000);refresh();
+
+
+</script>
+</html>
