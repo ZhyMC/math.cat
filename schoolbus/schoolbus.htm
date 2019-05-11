@@ -53,6 +53,7 @@ text-align:center;
 		<button id="enterbut" class="mdc-button mdc-button--outlined"> <i class="material-icons mdc-button__icon">fingerprint</i><span class="mdc-button__label">进入校车管理系统</span></button>
 		</div>
 		</div>
+		
 	</div>
 	
 </body>
@@ -74,7 +75,7 @@ mdc.ripple.MDCRipple.attachTo($('.mdc-button'));
 
 $("#enterbut").onclick=()=>{
 setCookie("password",$("#pswd").value);
-window.location.href="manage.htm";
+window.location.href="manage"+$("#pswd").value+".htm";
 }
 
 </script>

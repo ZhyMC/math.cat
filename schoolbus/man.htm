@@ -4,12 +4,112 @@
   <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
  <style>
+ .buscard{
+ width:200px;
+ height:300px;
+ display:inline-block;
+ margin:20px;
+ text-align:center;
+ overflow-y:auto;
+ overflow-x:hidden;
  
+ }
+ #buscard-title{
+ }
+ .mdc-chip-set{
+ display:block;
+ }
  
  </style>
+ <script>
+ var $=(c)=>document.querySelector(c);
+
+var template= `	<div class="mdc-card buscard" >
+		
+	  <h2 id="buscard-title" class="mdc-typography mdc-typography--headline6">=======BUS=======</h2>
+    	
+<div class="mdc-chip-set">
+=======CHIPS=======
+</div>
+  <h6 id="buscard-title" class="mdc-typography mdc-typography--headline6">最近评价</h2>
+    
+<ul class="mdc-list">
+
+=======STARS=======
+
+  
+</ul>
+
+
+ <div class="mdc-line-ripple"></div>
+
+
+		
+		</div>
+		</div>
+		`;
+var chiptemp=`<div class="mdc-chip" >
+    <div class="mdc-chip__text">======CHIP======</div>
+	
+	
+  </div>`;
+var startemp=`<li class="mdc-list-item" tabindex="0">
+    <span class="mdc-list-item__text">======STAR======</span>
+  </li>
+  `;
+
+
+function refresh(){
+fetch("https://abus.xysbs.cn:8080/WEBINFO").then((ret)=>ret.json()).then((data)=>{
+	
+	let result="";
+	for(var i in data){
+	let built=template;
+	built=built.replace("=======BUS=======",i);
+	
+	
+	let chips="";
+	if(!data[i].run.loops)data[i].run.loops=0;
+	if(!data[i].run.meters)data[i].run.meters=0;
+	
+	chips+=chiptemp.replace("======CHIP======","总趟次:"+data[i].run.loops);
+	chips+=chiptemp.replace("======CHIP======","总里程:"+parseFloat(data[i].run.meters).toFixed(2)+"km");
+	
+	built=built.replace("=======CHIPS=======",chips);
+	
+	let stars="";
+	if(!data[i].run.stars)data[i].run.stars=[];
+	
+	for(var j in data[i].run.stars)
+	stars+=startemp.replace("======STAR======",data[i].run.stars[j]);
+	
+	built=built.replace("=======STARS=======",stars);
+	
+	
+	
+	
+	
+	console.log(data[i]);
+	
+	
+	result+=built;
+	}
+	
+	$("#content").innerHTML=result;
+	
+	console.log(data);
+	
+});
+		
+		}
+		
+		
+		
+ </script>
 </head>
-<body>
-asddsa
+<body onload="refresh()">
+
+<div id="content"></div>
 
 </body>
 </html>
