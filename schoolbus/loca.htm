@@ -56,19 +56,42 @@
 	
 return {marker,label};
 	}
+var polylines=[];
+function firsttime(){
+fetch("https://abus.xysbs.cn:8080/ALLINFO").then((ret)=>ret.json()).then((obj)=>{
+for(var i in obj.polyline){
+let path=[];
+for(var j in obj.polyline[i].points)
+path.push(new qq.maps.LatLng(obj.polyline[i].points[j].latitude,obj.polyline[i].points[j].longitude));
 
+polylines.push(new qq.maps.Polyline({
+    map: map,
+    path,
+	strokeWeight: 5,
+    strokeColor: new qq.maps.Color(parseInt(obj.polyline[i].color.substr(1,2),16), parseInt(obj.polyline[i].color.substr(3,2),16), parseInt(obj.polyline[i].color.substr(5,2),16), 1)
+}));
+}
+for(var i in obj.businfo)
+overlays.push(createMarker(obj.businfo[i].lat,obj.businfo[i].lon,obj.businfo[i].strinfo));
+
+});
+
+
+}
 function refresh(){
 
 fetch("https://abus.xysbs.cn:8080/ALLINFO").then((ret)=>ret.json()).then((obj)=>{
 clearAll();
 for(var i in obj.businfo)
 overlays.push(createMarker(obj.businfo[i].lat,obj.businfo[i].lon,obj.businfo[i].strinfo));
+
 	
 })
 
 }
 
-setInterval(refresh,3000);refresh();
+setInterval(refresh,3000);
+firsttime();
 
 
 </script>
