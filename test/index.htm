@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="mdc/material-components-web.min.js"></script>
+  <link href="mdc/material-components-web.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+ 
+<style>
+body{
+background:#EEE;
+}
+#welcome{
+text-align:center;
+margin-top:10%;
+}
+#welcome img{
+width:200px;
+height:200px;
+}
+#welcome #logo{
+margin-bottom:50px;
+}
+#welcome #card{
+width:300px;
+padding:30px;
+display:inline-block;
+
+}
+#welcome #password{
+margin-bottom:30px;
+background-color:#FFF;
+}
+#welcome #password input{
+text-align:center;
+}
+</style>
+
+</head>
+
+<body>
+
+	<div id="welcome">	
+		<div id="card" class="mdc-card">
+		<div id="logo"><img id="logoimg" src="student.svg"></img></div>
+		
+		<div id="enter">
+	<div id="password" class="mdc-text-field">
+  <input onblur="refreshHead(this.value)" id="pswd" type="password" id="my-text-field" class="mdc-text-field__input">
+  <label class="mdc-floating-label" for="my-text-field">请输入你的学员口令</label>
+  <div class="mdc-line-ripple"></div>
+</div>
+
+
+		<button disabled id="enterbut" class="mdc-button mdc-button--outlined"> <i class="material-icons mdc-button__icon">fingerprint</i><span class="mdc-button__label">进入学徒计划</span></button>
+		</div>
+		</div>
+		
+	</div>
+	
+</body>
+
+<script>
+function setCookie(c_name,value,expiredays)
+{
+var exdate=new Date()
+exdate.setDate(exdate.getDate()+expiredays)
+document.cookie=c_name+ "=" +escape(value)+
+((expiredays==null) ? "" : ";expires="+exdate.toGMTString())
+}
+
+var $=(c)=>document.querySelector(c);
+
+
+mdc.textField.MDCTextField.attachTo($('.mdc-text-field'));
+mdc.ripple.MDCRipple.attachTo($('.mdc-button'));
+
+function refreshHead(value){
+fetch("https://abus.xysbs.cn:2020/?action=getaccount&pswd="+value).then((ret)=>ret.json())
+.then((obj)=>{
+if(obj.headimgurl)
+{$("#logoimg").src=obj.headimgurl;
+$("#enterbut").removeAttribute("disabled");
+}
+console.log(obj);
+
+})
+
+}
+
+
+$("#enterbut").onclick=()=>{
+setCookie("password",$("#pswd").value);
+window.location.href="stuplan.htm";
+}
+
+
+</script>
+
+ </html>
