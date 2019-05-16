@@ -47,7 +47,8 @@ margin-top:5vh;
 min-height:50vh;
 padding-left:2vw;
 padding-right:2vw;
-padding-top:3vh;
+padding-top:1vh;
+margin-bottom:5vh;
 }
 .rankLine{
 height:16vh;
@@ -56,14 +57,16 @@ overflow-y:auto;
 }
 .rankLevel{
 text-align:center;
-font-size:12px;
+font-size:18px;
 line-height:2vh;
-
+font-weight:bold;
+margin-bottom:1vh;
+margin-top:1vh;
 }
 .rankCompete{
 display:inline-block;
 margin-top:1vh;
-margin-right:1vh;
+margin-right:2vw;
 border:1px solid;
 padding:2px;
 border-radius:3px;
@@ -111,6 +114,34 @@ margin-right:2vw;
 margin-top:1vh;
 border-bottom:1px solid;
 }
+#compete{
+margin-top:3vh;
+padding-left:10vw;
+padding-right:10vw;
+height:25vh;
+text-align:center;
+display:block !important;
+}
+#compete img{
+height:10vh;
+max-width:10vw;
+vertical-align:middle;
+margin:10px;
+}
+.competeinfo{
+margin-top:2vh;
+line-height:2vh;
+padding-bottom:0.2vh;
+border-bottom:1px solid #CCC;
+
+}
+.victory{
+border:3px solid green;
+}
+.defeat{
+border:3px solid red;
+}
+
 </style>
 
 </head>
@@ -161,7 +192,14 @@ border-bottom:1px solid;
 </div>
 
 	</div>
+	<div id="compete" class="mdc-card">
+	<img id="head1" src="student.svg"/>
+	vs
+	<img id="head2" src="student.svg"/>
+	<div id="competeinfo1" class="competeinfo"></div>
+	<div id="competeinfo2" class="competeinfo"></div>
 	
+	</div>
 	<div id="ranklist" class="mdc-card">
 		
 		</div>
@@ -190,29 +228,84 @@ if (document.cookie.length>0)
     return unescape(document.cookie.substring(c_start,c_end))
     } 
   }
-return ""
+return "enhq43";
 }
 
 mdc.ripple.MDCRipple.attachTo($('.mdc-button'));
 mdc.ripple.MDCRipple.attachTo($('.mdc-card__primary-action'));
 
+function getRankSet(rank){
+if(rank==0)
+	return "黄铜 V";
+else if(rank==1)
+	return "黄铜 III";
+else if(rank==2)
+	return "黄铜 I";
+else if(rank==3)
+	return "白银 V";
+else if(rank==4)
+	return "白银 III";
+else if(rank==5)
+	return "白银 I";
+else if(rank==6)
+	return "黄金 V";
+else if(rank==7)
+	return "黄金 III";
+else if(rank==8)
+	return "黄金 I";
+else if(rank==9)
+	return "白金 V";
+else if(rank==10)
+	return "白金 III";
+else if(rank==11)
+	return "白金 I";
+else if(rank==12)
+	return "钻石 V";
+else if(rank==13)
+	return "钻石 III";
+else if(rank==14)
+	return "钻石 I";
+else if(rank>=15 && rank<18)
+	return "超凡大师";
+else if(rank>=18)
+	return "最强王者";
+else return "未知段位";
+}
 function refreshRankList(type){
 
 fetch("https://abus.xysbs.cn:2020/?action=viewrank&type="+type).then((ret)=>ret.json()).then((obj)=>{
 
 let built="";
+let lvls=Object.keys(obj);
+lvls.sort((a,b)=>b-a);
 
-for(var i in obj)
-{built+=`<div class="rankLevel">`+i+`分层</div><div class="rankLine">`;
+for(var i in lvls)
+{
+let ind=lvls[i];
+built+=`<div class="rankLevel"> - `+getRankSet(ind)+` - </div><div class="rankLine">`;
 
-for(var j in obj[i])
+for(var j in obj[ind])
+
+if(obj[ind][j][0].win){
 
 	built+=`<div class="rankCompete">
-			<img src="`+obj[i][j][0].head+`" />
+			<img style='vertical-align:middle;border:3px solid `+((obj[ind][j][0].win==1)?'green':'red')+`;' src="`+obj[ind][j][0].head+`" />
 			<span class="vs">vs</span>
-			<img src="`+obj[i][j][1].head+`" />
+			<img style='vertical-align:middle;border:3px solid `+((obj[ind][j][1].win==2)?'green':'red')+`;' src="`+obj[ind][j][1].head+`" />
 			
 			</div>`;
+	
+	}
+	else
+	
+		built+=`<div class="rankCompete">
+			<img style="vertical-align:middle;" src="`+obj[ind][j][0].head+`" />
+			<span class="vs">vs</span>
+			<img style="vertical-align:middle;" src="`+obj[ind][j][1].head+`" />
+			
+			</div>`;
+	
+
 			
 built+="</div>";
 }
@@ -238,10 +331,24 @@ if(obj.nick){
 $("#url").value=obj.push;
 $("#avatarimg").src=obj.headimgurl;
 $("#name").innerHTML=obj.nick;
-$("#rankscore").innerHTML=obj.info.rank+"";
+$("#rankscore").innerHTML=getRankSet(obj.info.rank);
 $("#task").innerHTML=obj.task;
 $("#typename").innerHTML=obj.type;
 refreshRankList(obj.type);
+
+if(obj.info1)
+$("#competeinfo1").innerHTML=obj.info1;
+if(obj.win || obj.win2)
+$("#head1").setAttribute("class","competeinfo "+(obj.win?"victory":"defeat"));
+
+$("#head1").src=obj.head1;
+
+if(obj.info2)
+$("#competeinfo2").innerHTML=obj.info2;
+$("#head2").src=obj.head2;
+if(obj.win || obj.win2)
+$("#head2").setAttribute("class","competeinfo "+(obj.win2?"victory":"defeat"));
+
 
 }
 })}
