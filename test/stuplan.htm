@@ -180,6 +180,16 @@ setTimeout(()=>$("#pushInfo").style.opacity="0",3000);
 
 
 }
+function refreshInfo(){
+fetch("https://abus.xysbs.cn:2020/?action=pushresult&pswd="+getCookie("password"))
+.then((ret)=>ret.json()).then((obj)=>{
+
+console.log(obj);
+});
+
+
+
+}
 refreshRankList();
 </script>
 
