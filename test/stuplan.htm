@@ -171,7 +171,7 @@ built+="</div>";
 }
 
 function pushResult(result){
-fetch("https://abus.xysbs.cn:2020/?action=pushresult&openid="+getCookie("password")+"&result="+encodeURIComponent(result)).then((ret)=>ret.json()).then((obj)=>{
+fetch("https://abus.xysbs.cn:2020/?action=pushresult&pswd="+getCookie("password")+"&result="+encodeURIComponent(result)).then((ret)=>ret.json()).then((obj)=>{
 $("#pushInfo").style.opacity="1";
 setTimeout(()=>$("#pushInfo").style.opacity="0",3000);
 
