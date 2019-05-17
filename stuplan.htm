@@ -346,7 +346,10 @@ $("#url").value=obj.push;
 $("#avatarimg").src=obj.headimgurl;
 $("#name").innerHTML=obj.nick;
 $("#rankscore").innerHTML=getRankSet(obj.info.rank);
+
+if(obj.task)
 $("#task").innerHTML=obj.task;
+
 $("#typename").innerHTML=obj.type;
 refreshRankList(obj.type);
 
@@ -355,11 +358,19 @@ $("#competeinfo1").innerHTML=obj.info1;
 if(obj.win || obj.win2)
 $("#head1").setAttribute("class","competeinfo "+(obj.win?"victory":"defeat"));
 
+if(obj.head1)
 $("#head1").src=obj.head1;
+else
+$("#head1").src="student.svg";
 
 if(obj.info2)
 $("#competeinfo2").innerHTML=obj.info2;
+
+if(obj.head2)
 $("#head2").src=obj.head2;
+else
+$("#head2").src="student.svg";
+
 if(obj.win || obj.win2)
 $("#head2").setAttribute("class","competeinfo "+(obj.win2?"victory":"defeat"));
 
