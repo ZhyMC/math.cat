@@ -2,9 +2,26 @@
 
 <head>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<style>
+#todayName{
+font-size:32px;
+font-weight:bold;
+text-align:center;
+
+}
+#today{
+font-size:24px;
+text-align:center;
+margin-top:20px;
+}
+</style>
 </head>
+
 <body style="margin:0;">
 <canvas id="zcpi"></canvas>
+<div id="todayName"></div>
+<div id="today"></div>
+
 </body>
 <script>
 var ctx = document.getElementById('zcpi').getContext('2d');
@@ -27,6 +44,8 @@ chart = new Chart(ctx, {
 
     options: {}
 });
+document.getElementById("todayName").innerHTML=obj.labels[obj.labels.length-1]+"的ZCPI指数："
+document.getElementById("today").innerHTML=obj.datas[obj.datas.length-1].toFixed(2);
 
 });
 </script>
