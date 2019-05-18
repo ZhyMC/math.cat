@@ -9,7 +9,7 @@
 <script>
 var ctx = document.getElementById('zcpi').getContext('2d');
 var chart;
-fetch("http://www.math.cat:1010/").then((ret)=>ret.json()).then((obj)=>{
+fetch("https://www.math.cat:1010/").then((ret)=>ret.json()).then((obj)=>{
 chart = new Chart(ctx, {
     type: 'line',
 
