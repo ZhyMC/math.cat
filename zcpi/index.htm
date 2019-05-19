@@ -44,14 +44,19 @@ chart = new Chart(ctx, {
 
     options: {}
 });
-let to=new Date()
+for(let off=0;off<5;off++){
+let to=new Date((new Date()).getTime()-1000*60*60*24*off)
 let y=1900+to.getYear();
 let m=to.getMonth()<9?('0'+(1+to.getMonth())):(1+to.getMonth());
 let d=to.getDate()<9?('0'+(to.getDate())):(1+to.getDate());
 let dt=y+"-"+m+"-"+d;
+	
+	if(obj.labels.indexOf(dt)!=-1){
 document.getElementById("todayName").innerHTML=dt+"的ZCPI指数："
 document.getElementById("today").innerHTML=obj.datas[obj.labels.indexOf(dt)].toFixed(2);
-
+		break;
+	}
+}
 });
 </script>
 </html>
