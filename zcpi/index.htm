@@ -44,8 +44,13 @@ chart = new Chart(ctx, {
 
     options: {}
 });
-document.getElementById("todayName").innerHTML=obj.labels[obj.labels.length-1]+"的ZCPI指数："
-document.getElementById("today").innerHTML=obj.datas[obj.datas.length-1].toFixed(2);
+let to=new Date()
+let y=1900+to.getYear();
+let m=to.getMonth()<9?('0'+(1+to.getMonth())):(1+to.getMonth());
+let d=to.getDate()<9?('0'+(to.getDate())):(1+to.getDate());
+let dt=y+"-"+m+"-"+d;
+document.getElementById("todayName").innerHTML=dt+"的ZCPI指数："
+document.getElementById("today").innerHTML=obj.datas[obj.labels.indexOf(dt)].toFixed(2);
 
 });
 </script>
