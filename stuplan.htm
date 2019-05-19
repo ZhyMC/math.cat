@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -51,6 +52,34 @@ padding-left:2vw;
 padding-right:2vw;
 padding-top:1vh;
 margin-bottom:5vh;
+width:68%;
+float:left;
+}
+#pushlist{
+padding-left:10px;
+padding-right:10px;
+padding-top:1vh;
+margin-top:5vh;
+margin-bottom:5vh;
+
+min-height:50vh;
+
+width:28%;
+float:right;
+
+	
+}
+#pushlist .mdc-list-item{
+background-color:#EEE;
+padding-left:0;
+padding-right:0;
+color:#555;
+}
+#pushlist img{
+	width:50px;
+	height:50px;
+	margin-right:15px;
+	border-radius:5px;
 }
 .rankLine{
 height:16vh;
@@ -149,11 +178,28 @@ margin-left:5vw;
 margin-right:5vw;
   
     }
+	#pushlist{
+	width:100%;
+	clear:both;
+	margin-top:0;
+	
+	}
+	#ranklist{
+	width:100%;
+	clear:both;
+	}	
+	
 }
 
 #title{
 text-align:center;
 margin-bottom:2vh;
+}
+#l_title{
+text-align:center;
+
+color:#777;
+padding-bottom:4px;
 }
 </style>
 
@@ -215,8 +261,19 @@ margin-bottom:2vh;
 	<div id="competeinfo2" class="competeinfo"></div>
 	
 	</div>
+	
+	
 	<div id="ranklist" class="mdc-card">
 		
+		</div>
+	
+	<div id="pushlist" class="mdc-card">
+		<div id="l_title">已提交</div>
+		
+		<ul id="pushl" class="mdc-list">
+		
+		</ul>
+
 		</div>
 	
 	
@@ -243,6 +300,7 @@ if (document.cookie.length>0)
     return unescape(document.cookie.substring(c_start,c_end))
     } 
   }
+  return "omxk63";
 }
 
 mdc.ripple.MDCRipple.attachTo($('.mdc-button'));
@@ -293,15 +351,22 @@ let built="";
 let lvls=Object.keys(obj);
 lvls.sort((a,b)=>b-a);
 
+let pushed=[];
 for(var i in lvls)
 {
 let ind=lvls[i];
 built+=`<div class="rankLevel"> - `+getRankSet(ind)+` - </div><div class="rankLine">`;
 
 for(var j in obj[ind])
+{
 
+	if(obj[ind][j][0].push.length>0)
+		pushed.push(`<li class="mdc-list-item"><img src=`+obj[ind][j][0].head+`></img><span class="mdc-list-item__text">`+/*obj[ind][j][0].nick+*/"提交 "+obj[ind][j][0].push+`</span></li>`);
+	if(obj[ind][j][1].push.length>0)
+		pushed.push(`<li class="mdc-list-item"><img src=`+obj[ind][j][1].head+`></img><span class="mdc-list-item__text">`+/*obj[ind][j][1].nick+*/"提交 "+obj[ind][j][1].push+`</span></li>`);
+	
 if(obj[ind][j][0].win){
-
+	
 	built+=`<div class="rankCompete">
 			<img style='vertical-align:middle;border:3px solid `+((obj[ind][j][0].win==1)?'green':'red')+`;' src="`+obj[ind][j][0].head+`" />
 			<span class="vs">vs</span>
@@ -319,12 +384,15 @@ if(obj[ind][j][0].win){
 			
 			</div>`;
 	
-
+}
 			
 built+="</div>";
 }
 			
 	$("#ranklist").innerHTML=built;		
+	$("#pushl").innerHTML=pushed.join('');		
+			
+
 });
 }
 
