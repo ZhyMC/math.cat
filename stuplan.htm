@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -367,9 +368,9 @@ for(var j in obj[ind])
 if(obj[ind][j][0].win){
 	
 	built+=`<div class="rankCompete">
-			<img style='vertical-align:middle;border:3px solid `+((obj[ind][j][0].win==1)?'green':'red')+`;' src="`+obj[ind][j][0].head+`" />
+			<img style='vertical-align:middle;border:3px solid `+(((obj[ind][j][0].win==1 || obj[ind][j][0].win==3) && obj[ind][j][0].win!=4)?'green':'red')+`;' src="`+obj[ind][j][0].head+`" />
 			<span class="vs">vs</span>
-			<img style='vertical-align:middle;border:3px solid `+((obj[ind][j][1].win==2)?'green':'red')+`;' src="`+obj[ind][j][1].head+`" />
+			<img style='vertical-align:middle;border:3px solid `+(((obj[ind][j][0].win==1 || obj[ind][j][0].win==3) && obj[ind][j][0].win!=4 )?'green':'red')+`;' src="`+obj[ind][j][1].head+`" />
 			
 			</div>`;
 	
