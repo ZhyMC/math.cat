@@ -38,7 +38,7 @@
 	for(var i in overlays)
 	{
 	overlays[i].marker.setMap(null);
-	overlays[i].label.setMap(null);
+//	overlays[i].label.setMap(null);
 	}
 	
 	overlays=[];
@@ -53,11 +53,12 @@
 	
 	marker.setIcon(new qq.maps.MarkerImage("driving.png",new qq.maps.Size(50,50),undefined,undefined,new qq.maps.Size(50,50)))
 	
-	var label=new qq.maps.Label({
+	/*var label=new qq.maps.Label({
 	position: new qq.maps.LatLng(lat,lon),
     map: map,
     content:title
-	})
+	})*/
+	    var label=undefined;
 	
 return {marker,label};
 	}
