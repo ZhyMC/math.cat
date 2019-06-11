@@ -5,7 +5,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
  <style>
  .buscard{
- width:200px;
+ width:240px;
  height:300px;
  display:inline-block;
  margin:20px;
@@ -81,7 +81,7 @@ fetch("https://abus.xysbs.cn:8080/WEBINFO").then((ret)=>ret.json()).then((data)=
 	
 	//chips+=chiptemp.replace("======CHIP1======","总趟次:"+.loops);
 	
-		for(var k in data[i].run.meter)
+		for(var k in data[i].run.loops)
 		{
 	chips+=chiptemp.replace("======CHIP2======","趟次:"+data[i].run.loops[k])
 			.replace("======CHIP1======",k+"  "+data[i].run.loops[k]+"趟");
