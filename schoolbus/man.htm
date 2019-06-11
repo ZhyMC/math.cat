@@ -27,10 +27,16 @@
 var template= `	<div class="mdc-card buscard" >
 		
 	  <h2 id="buscard-title" class="mdc-typography mdc-typography--headline6">=======BUS=======</h2>
-    	
+	
+趟次:
 <select>
 =======CHIPS=======
 </select>
+里程:
+<select>
+=======CHIPS2=======
+</select>
+
   <h6 id="buscard-title" class="mdc-typography mdc-typography--headline6">最近评价</h2>
     
 <ul class="mdc-list">
@@ -75,15 +81,17 @@ fetch("https://abus.xysbs.cn:8080/WEBINFO").then((ret)=>ret.json()).then((data)=
 		for(var k in data[i].run.meter)
 		{
 	chips+=chiptemp.replace("======CHIP2======","趟次:"+data[i].run.loops[k])
-			.replace("======CHIP1======",k);
+			.replace("======CHIP1======",k+"  "+data[i].run.loops[k]+"趟");
 		}
 		
-		for(var k in data[i].run.meter)
+	built=built.replace("=======CHIPS=======",chips);
+	chips="";	
+	for(var k in data[i].run.meter)
 		{
 	chips+=chiptemp.replace("======CHIP2======","里程:"+parseFloat(data[i].run.meter[k]/1000).toFixed(2)+"km")
-			.replace("======CHIP1======",k);
+			.replace("======CHIP1======",k+"  "+parseFloat(data[i].run.meter[k]/1000).toFixed(2)+"km");
 		}
-	built=built.replace("=======CHIPS=======",chips);
+	built=built.replace("=======CHIPS2=======",chips);
 	
 	let stars="";
 	if(!data[i].run.stars)data[i].run.stars=[];
