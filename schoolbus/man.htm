@@ -101,11 +101,15 @@ fetch("https://abus.xysbs.cn:8080/WEBINFO").then((ret)=>ret.json()).then((data)=
 	chips+=chiptemp.replace("======CHIP2======","趟次:"+data[i].run.loops[k])
 			.replace("======CHIP1======",k+"  "+data[i].run.loops[k]+"趟");
 		}
-		
+	if(chips=="")
+		chips=="当前数据为空";
+	
 	built=built.replace("=======CHIPS=======",chips);
 	chips="";	
 	for(var k in data[i].run.loops_month)
 			chips+=chiptemp.replace("======CHIP1======",k+"  "+data[i].run.loops_month[k]);
+	if(chips=="")
+		chips=="当前数据为空";
 	
 	built=built.replace("=======CHIPS_=======",chips);
 	
@@ -115,13 +119,18 @@ fetch("https://abus.xysbs.cn:8080/WEBINFO").then((ret)=>ret.json()).then((data)=
 	chips+=chiptemp.replace("======CHIP2======","里程:"+parseFloat(data[i].run.meter[k]/1000).toFixed(2)+"km")
 			.replace("======CHIP1======",k+"  "+parseFloat(data[i].run.meter[k]/1000).toFixed(2)+"km");
 		}
-
+	if(chips=="")
+		chips=="当前数据为空";
+	
 	built=built.replace("=======CHIPS2=======",chips);
 	
 	chips="";	
 	for(var k in data[i].run.meter_month)
 			chips+=chiptemp.replace("======CHIP1======",k+"  "+parseFloat(data[i].run.meter_month[k]/1000).toFixed(2)+"km");
 	
+	if(chips=="")
+		chips=="当前数据为空";
+		
 	built=built.replace("=======CHIPS2_=======",chips);
 	
 		
