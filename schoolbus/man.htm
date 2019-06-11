@@ -138,7 +138,7 @@ fetch("https://abus.xysbs.cn:8080/WEBINFO").then((ret)=>ret.json()).then((data)=
 	if(!data[i].run.stars)data[i].run.stars=[];
 	
 	for(var j in data[i].run.stars)
-	stars+=startemp.replace("======STAR======",data[i].run.stars[j]);
+	stars+=startemp.replace("======STAR======",decodeURIComponent(data[i].run.stars[j]));
 	
 	built=built.replace("=======STARS=======",stars);
 	
