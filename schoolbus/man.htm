@@ -72,9 +72,15 @@ fetch("https://abus.xysbs.cn:8080/WEBINFO").then((ret)=>ret.json()).then((data)=
 	
 	//chips+=chiptemp.replace("======CHIP1======","总趟次:"+.loops);
 	
-		for(var k in data[i].meter)
+		for(var k in data[i].run.meter)
 		{
-	chips+=chiptemp.replace("======CHIP2======","里程:"+parseFloat(data[i].meter[k].meters/1000).toFixed(2)+"km")
+	chips+=chiptemp.replace("======CHIP2======","趟次:"+data[i].run.loops[k])
+			replace("======CHIP1======",k);
+		}
+		
+		for(var k in data[i].run.meter)
+		{
+	chips+=chiptemp.replace("======CHIP2======","里程:"+parseFloat(data[i].run.meter[k]/1000).toFixed(2)+"km")
 			replace("======CHIP1======",k);
 		}
 	built=built.replace("=======CHIPS=======",chips);
