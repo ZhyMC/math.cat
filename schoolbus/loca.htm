@@ -28,9 +28,12 @@
 		  mapTypeId: qq.maps.MapTypeId.ROADMAP,
 		mapStyleId: 'style1'
     });
-	setTimeout(()=>{
+	setInterval(()=>{
 	document.getElementsByClassName("smnoprint")[0].style.display="none";
 	document.getElementsByClassName("smnoprint")[1].style.display="none";
+	document.getElementsByClassName("csssprite")[0].style.display="none";
+	
+	
 	},1000);
 	var overlays=[];
 	
