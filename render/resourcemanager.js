@@ -2,8 +2,10 @@ class ResourceManager{
 	constructor(dir,preload){
 		this.dir=dir;
 		this.cache={};
+		(async()=>{
 		for(var i in preload)
-			this.loadRes(preload[i]);
+			await this.loadRes(preload[i]);
+		})();
 	//	this.empty=new Image();
 	}
 
