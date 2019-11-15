@@ -4,9 +4,13 @@
 </head>
 <body style="background:#000;margin:0;">
 
-<div id="loading" style="z-index:999;position:absolute;text-align:center;width:20vw;height:fit-content;background:#FFF;top:40vh;border:1px solid blue;color:red;left:40vw;">
+<div id="loadingframe" style="z-index:999;position:absolute;top:40vh;width:100vw;display:flex;flex-direction:row;justify-content:center;">
+<div style="border:1px solid black;padding:5px;">
+<div id="loading" style="text-align:center;width:fit-content;height:fit-content;background:#FFF;color:red;">
 资源加载中
 <div id="loadinginfo" style="color:#000;">loading...</div>
+</div>
+</div>
 </div>
 <div id="container" style="width:100vw;height:100vh;position:absolute;top:0;width:fit-content;height:fit-content;">
 	<div style="width:100vw;">
@@ -117,6 +121,8 @@ new ResourceManager("render/resources/",["models/arrow.png","models/back2_close.
 	},()=>{
 		console.log("preload end");
 		document.getElementById("loading").style.display="none";
+		document.getElementById("loadingframe").style.display="none";
+		
 		loadinginfo.style.display="none";
 	}).init().then((resourcemanager)=>{
 	
