@@ -49,7 +49,7 @@ window.screenController=class screenController extends Controller{
 			
 		};
 		document.documentElement.onfullscreenchange=scrcg;
-//		scrcg();
+		window.onresize();
 	}
 	regAllControllers(){
 		console.log("screenController registered");
