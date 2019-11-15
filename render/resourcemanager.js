@@ -3,11 +3,12 @@ class ResourceManager{
 		this.dir=dir;
 		this.cache={};
 		for(var i in preload)
-			getImage(preload[i]);
+			this.loadRes(preload[i]);
 	//	this.empty=new Image();
 	}
 
 	loadRes(src){
+		console.log("loadRes",src)
 		return new Promise((y)=>{
 			let im=new Image();
 			im.src=this.dir+src;
