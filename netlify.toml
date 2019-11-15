@@ -1,8 +1,8 @@
 [[headers]]
   for = "*.png"
   [headers.values]
-    Cache-Control = "public, max-age=604800"
+    Cache-Control = "max-age=604800"
 [[headers]]
   for = "/render/resources/models/*"
   [headers.values]
-    Cache-Control = "public, max-age=604800"
+    Cache-Control = "max-age=604800"
