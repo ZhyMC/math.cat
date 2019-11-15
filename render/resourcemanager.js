@@ -1,24 +1,39 @@
+var sleep=(t)=>new Promise((y)=>setTimeout(y,t));
 class ResourceManager{
 	constructor(dir,preload){
 		this.dir=dir;
 		this.cache={};
+		if(preload){
 		(async()=>{
+		preload=preload.filter((v)=>(v.substr(-4,4)==".png"))
+		console.log("preload",preload);
 		for(var i in preload)
 			await this.loadRes(preload[i]);
 		})();
+		}
 	//	this.empty=new Image();
 	}
 
-	loadRes(src){
-		console.log("loadRes",src)
-		return new Promise((y)=>{
+	async loadRes(src){			
+		let tr=()=>new Promise((y)=>{
 			let im=new Image();
 			im.src=this.dir+src;
 			im.onload=()=>{
 				y(im);
 			};
 			
-		})
+		});
+		do{
+			console.log("loadRes",src);
+			let p=tr();
+			let p2=await Promise.race([sleep(3000),p]);
+			
+			if(p2)return p2;
+		
+		}while(true);
+		
+		
+		
 	}
 	async getImage(src,width,height){
 		if(!src || src.length<=0)return undefined;
