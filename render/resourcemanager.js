@@ -10,6 +10,8 @@ class ResourceManager{
 		this.init();
 		this.loading={};
 		this.empty=new Image();
+		
+		this.images={};
 	}
 	async init(){
 		
@@ -19,11 +21,13 @@ class ResourceManager{
 		return this;
 		
 	}
-	async loadRes(src){			
+	async loadRes(src){
+		if(this.images[src])return this.images[src];
 		let tr=()=>new Promise((y)=>{
 			let im=new Image();
 			im.src=this.dir+src;
 			im.onload=()=>{
+				this.images[src]=im;
 				y(im);
 			};
 			
