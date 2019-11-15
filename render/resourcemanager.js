@@ -8,7 +8,8 @@ class ResourceManager{
 		console.log("preload",preload);
 		this.preload=preload;
 		this.init();
-	//	this.empty=new Image();
+		this.loading={};
+		this.empty=new Image();
 	}
 	async init(){
 		
@@ -43,13 +44,17 @@ class ResourceManager{
 		if(!src || src.length<=0)return undefined;
 		if(this.cache[src])
 			return this.cache[src];
-		var cvs=document.createElement("canvas");
-		cvs.width=width;
-		cvs.height=height;
-		let img=await this.loadRes(src);
-		cvs.getContext("2d").drawImage(img,0,0,width,height);
-		this.cache[src]=cvs;
-		return this.cache[src];
+		if(this.loading[src])
+			return this.empty;
+		this.loading[src]=false;
+		this.loadRes(src).then((img)=>{
+			var cvs=document.createElement("canvas");
+			cvs.width=width;
+			cvs.height=height;
+				
+			cvs.getContext("2d").drawImage(img,0,0,width,height);
+			this.cache[src]=cvs;
+		})
 	}
 
 }
