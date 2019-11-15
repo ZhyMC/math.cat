@@ -28,8 +28,9 @@ class Arrow extends Entity{
 		this.model.flip=true;
 		}
 		else
-		this.model.rotate=-this.vector.y/Math.sqrt((this.vector.x*this.vector.x)+(this.vector.y*this.vector.y))*0.25;
-	
+		{	this.model.rotate=-this.vector.y/Math.sqrt((this.vector.x*this.vector.x)+(this.vector.y*this.vector.y))*0.25;
+		this.model.flip=false;
+		}
 		if(this.aliveTicks>2){
 		for(var i in this.insided)
 			if(this.insided[i].inside.isEntity && !this.damaged[this.insided[i].inside.entityId]){
