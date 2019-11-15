@@ -8,7 +8,7 @@ class ResourceManager{
 		preload=preload.filter((v)=>(v.substr(-4,4)==".png"))
 		console.log("preload",preload);
 		for(var i in preload)
-			await this.loadRes(preload[i]);
+			await this.getImage(preload[i]);
 		})();
 		}
 	//	this.empty=new Image();
