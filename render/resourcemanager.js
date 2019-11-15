@@ -46,14 +46,16 @@ class ResourceManager{
 			return this.cache[src];
 		if(this.loading[src])
 			return this.empty;
-		this.loading[src]=false;
+		this.loading[src]=true;
 		this.loadRes(src).then((img)=>{
 			var cvs=document.createElement("canvas");
 			cvs.width=width;
 			cvs.height=height;
-				
+		
 			cvs.getContext("2d").drawImage(img,0,0,width,height);
 			this.cache[src]=cvs;
+			this.loading[src]=false;
+	
 		})
 	}
 
