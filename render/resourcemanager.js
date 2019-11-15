@@ -7,7 +7,7 @@ class ResourceManager{
 		preload=preload.filter((v)=>(v.substr(-4,4)==".png"));
 		console.log("preload",preload);
 		this.preload=preload;
-		this.init();
+		//this.init();
 		this.loading={};
 		this.empty=new Image();
 		
@@ -48,10 +48,10 @@ class ResourceManager{
 		if(!src || src.length<=0)return undefined;
 		if(this.cache[src])
 			return this.cache[src];
-		if(this.loading[src])
-			return this.empty;
+		/*if(this.loading[src])
+			return this.empty;*/
 		this.loading[src]=true;
-		this.loadRes(src).then((img)=>{
+		return await this.loadRes(src).then((img)=>{
 			var cvs=document.createElement("canvas");
 			cvs.width=width;
 			cvs.height=height;
@@ -59,7 +59,7 @@ class ResourceManager{
 			cvs.getContext("2d").drawImage(img,0,0,width,height);
 			this.cache[src]=cvs;
 			this.loading[src]=false;
-	
+			return cvs;
 		})
 	}
 
