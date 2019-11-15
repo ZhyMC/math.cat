@@ -40,14 +40,16 @@ window.screenController=class screenController extends Controller{
 		this.right=getElementPosition(document.getElementById("arrowright"));
 		}
 		this.fullscreen=false;
-		document.documentElement.onfullscreenchange=(e)=>{
+		let scrcg=(e)=>{
 			this.fullscreen=!this.fullscreen;
 			if(this.fullscreen)
 				document.getElementById("fullscreen").style.display="none";
 			else
 				document.getElementById("fullscreen").style.display="block";
 			
-		}
+		};
+		document.documentElement.onfullscreenchange=scrcg;
+		scrcg();
 	}
 	regAllControllers(){
 		console.log("screenController registered");
