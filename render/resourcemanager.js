@@ -3,17 +3,21 @@ class ResourceManager{
 	constructor(dir,preload){
 		this.dir=dir;
 		this.cache={};
-		if(preload){
-		(async()=>{
-		preload=preload.filter((v)=>(v.substr(-4,4)==".png"))
+		if(!preload)preload=[];
+		preload=preload.filter((v)=>(v.substr(-4,4)==".png"));
 		console.log("preload",preload);
-		for(var i in preload)
-			await this.getImage(preload[i]);
-		})();
-		}
+		this.preload=preload;
+		this.init();
 	//	this.empty=new Image();
 	}
-
+	async init(){
+		
+		for(var i in this.preload)
+			await this.loadRes(this.preload[i]);
+		
+		return this;
+		
+	}
 	async loadRes(src){			
 		let tr=()=>new Promise((y)=>{
 			let im=new Image();
@@ -39,7 +43,7 @@ class ResourceManager{
 		if(!src || src.length<=0)return undefined;
 		if(this.cache[src])
 			return this.cache[src];
-		var cvs=document.createElement("canvas")
+		var cvs=document.createElement("canvas");
 		cvs.width=width;
 		cvs.height=height;
 		let img=await this.loadRes(src);
