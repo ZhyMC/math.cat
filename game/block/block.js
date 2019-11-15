@@ -33,8 +33,9 @@ class Block{
 		this.__entities=Array.from(this._entities);
 		
 		this.entities[ent.entityId]=ent;
-	//console.log("add",this.__entities)
+	//	console.log("add",this.__entities,ent);
 	}
+	
 		}
 	removeEntity(ent){
 		//console.log(this.__entities.length);
@@ -51,11 +52,10 @@ class Block{
 		{//if(!this.entities[i].isPlayer)
 		
 				
+				ents[i].doTick();
 				this.game.loadBlocksNearby(ents[i].locx);
 				if(this.game.getBlockX(ents[i].locx)!=this.x || ents[i].dead)
 				this.removeEntity(ents[i]);
-				else
-				ents[i].doTick();
 				
 				
 		this.activeTicks=1000;
