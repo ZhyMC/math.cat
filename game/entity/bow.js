@@ -47,7 +47,7 @@ class Bow extends Entity{
 		if(this.interactEvent.ticks>=60){
 			let bl;
 			if(this.face>0.5)
-			{	bl=new Arrow(undefined,this.attach.ent.locx+30,this.attach.ent.locy+27,this.game);
+			{	bl=new Arrow(undefined,this.attach.ent.locx+0,this.attach.ent.locy+27,this.game);
 				
 				if(this.model.rotate<0)
 				bl.vector.x=30*(1+this.model.rotate/0.25);
