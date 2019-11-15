@@ -1,6 +1,6 @@
 var sleep=(t)=>new Promise((y)=>setTimeout(y,t));
 class ResourceManager{
-	constructor(dir,preload){
+	constructor(dir,preload,oncallback,onend){
 		this.dir=dir;
 		this.cache={};
 		if(!preload)preload=[];
@@ -10,14 +10,18 @@ class ResourceManager{
 		//this.init();
 		this.loading={};
 		this.empty=new Image();
+		this.oncallback=oncallback;
+		this.onend=onend;
 		
 		this.images={};
 	}
 	async init(){
 		
-		for(var i in this.preload)
+		for(var i in this.preload){
+			this.oncallback(this.preload[i],i,this.preload.length);
 			await this.loadRes(this.preload[i]);
-		
+		}
+		this.onend();
 		return this;
 		
 	}
@@ -29,6 +33,7 @@ class ResourceManager{
 			im.onload=()=>{
 				this.images[src]=im;
 				y(im);
+				
 			};
 			
 		});
