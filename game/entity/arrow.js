@@ -23,12 +23,11 @@ class Arrow extends Entity{
 		if(this.face<0.5)
 		{
 			
-			this.model.rotate=this.vector.y/Math.sqrt((this.vector.x*this.vector.x)+(this.vector.y*this.vector.y))*0.25;
-	
+			this.model.rotate=this.vector.y/Math.sqrt((this.vector.x*this.vector.x)+(this.vector.y*this.vector.y))*0.21;
 		this.model.flip=true;
 		}
 		else
-		{	this.model.rotate=-this.vector.y/Math.sqrt((this.vector.x*this.vector.x)+(this.vector.y*this.vector.y))*0.25;
+		{	this.model.rotate=-this.vector.y/Math.sqrt((this.vector.x*this.vector.x)+(this.vector.y*this.vector.y))*0.21;
 		this.model.flip=false;
 		}
 		if(this.aliveTicks>2){
