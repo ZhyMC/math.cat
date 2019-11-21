@@ -16,7 +16,7 @@ class NetworkC{
 		this.game=game;
 	}
 	reconnect(){
-			this.sock=new WebSocket("ws://"+this.addr+"/");
+			this.sock=new WebSocket("wss://"+this.addr+"/");
 			this.sock.onerror=function(){
 			this.ready=false;
 			console.log("error");

@@ -1,7 +1,7 @@
 class Client extends Game{
 	constructor(name,map){
 		super(map);
-		this.network=new NetworkC("39.108.72.242:8001");
+		this.network=new NetworkC("www.math.cat:8001");
 		this.network.setGame(this);
 		this.name=name;
 		this.setMPlayer(new Player(name,50,40*70,this));

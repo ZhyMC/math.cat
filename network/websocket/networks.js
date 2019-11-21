@@ -8,7 +8,11 @@ class NetworkS{
 		this.conns=new Map();this.connmap=new Map();
 		this.queue={};
 		this.tick=0;
-		this.sock=wsserver.createServer((conn)=>{
+		this.sock=wsserver.createServer({
+			secure:true,
+			key:fs.readFileSync(__dirname+"/key.txt"),
+			cert:fs.readFileSync(__dirname+"/cert.txt")
+		},(conn)=>{
 			
 			let connid="";
 			if(!this.connmap.has(conn))	
