@@ -40,3 +40,6 @@ for (j = 0; j < 256; ++j) {
 		   
     return res;
   };
+  
+ if(typeof(global)!="undefined")
+global.crc=crc;	 

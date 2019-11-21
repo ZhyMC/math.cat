@@ -1,4 +1,4 @@
-window.Torch=class extends Entity{
+class Torch extends Entity{
 	constructor(attach,x,y,game){
 		super(attach,x,y,game);
 		this.locx=x;
@@ -7,6 +7,7 @@ window.Torch=class extends Entity{
 		this.model.width=20;
 		this.model.height=20;
 		this.model.imagename="models/torch.png";
+		this._name="Torch";
 		
 		this.canpick=true;
 		this.attachType="hand";
@@ -18,7 +19,7 @@ window.Torch=class extends Entity{
 			
 			console.log("offed");
 //			if(this.light)
-			this.game.lights[this.light.id].dead=true;
+			//this.game.lights[this.light.id].dead=true;
 			this.light=undefined
 		}else if(!this.light){
 			
@@ -40,3 +41,5 @@ window.Torch=class extends Entity{
 	}
 	
 }
+
+if(typeof(global)!="undefined")global.Torch=Torch;

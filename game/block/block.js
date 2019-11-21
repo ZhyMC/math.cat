@@ -20,6 +20,9 @@ class Block{
 		this.from=x*Block.width;
 		this.to=(x+1)*Block.width;
 		
+		this.packets=[];
+		
+	//	this.needSync=false;
 	}
 	load(){
 		this.generate();
@@ -33,31 +36,88 @@ class Block{
 		this.__entities=Array.from(this._entities);
 		
 		this.entities[ent.entityId]=ent;
-	//	console.log("add",this.__entities,ent);
+		ent.enterBlock();
+		
+		this.needSync=true;
+		
+	}else{
+		let t=this.entities[ent.entityId];
+		this._entities.delete(t);
+		this._entities.add(ent);
+		
+		this.__entities=Array.from(this._entities);
+		
+		this.entities[ent.entityId]=ent;		
 	}
-	
+		this.game.entities[ent.entityId]=ent;
+		
 		}
 	removeEntity(ent){
 		//console.log(this.__entities.length);
+		
+		
 		this._entities.delete(ent);
 		this.__entities=Array.from(this._entities);
 	//	console.log(this.__entities.length);
 		
 		delete this.entities[ent.entityId];
-	//	console.log("remove",this.__entities)
+		
+		//this.game.getBlock(this.x-1).needSync=true;
+	//	this.game.getBlock(this.x+1).needSync=true;
+	
+		this.needSync=true;
+
+		delete this.game.entities[ent.entityId];
+		
+		
+	}
+	buildEntities(){//将实体状态统一封装
+		let built=[];
+		/*for(var i in this.entities){
+			let name=this.entities[i]._name;
+			if(this.entities[i].isPlayer)
+				name="Player("+this.entities[i].name+")";
+			
+			let entityattach=0;
+			if(this.entities[i].attach)
+				entityattach=this.entities[i].attach.ent.entityId;
+			
+			built.push({
+				entityid:this.entities[i].entityId,
+				entityname:name,
+				entitylocx:this.entities[i].locx,
+				entitylocy:this.entities[i].locy,
+				entityattach
+			})
+		}*/
+		for(var i in this.entities){
+			built.push(this.entities[i].getStatusPacket());
+		}
+		return built;
 	}
 	doTick(){
+	
 		let ents=this.entities;
 		for(var i in ents)
 		{//if(!this.entities[i].isPlayer)
-		
 				
+				let ent=ents[i];
 				ents[i].doTick();
-				this.game.loadBlocksNearby(ents[i].locx);
-				if(this.game.getBlockX(ents[i].locx)!=this.x || ents[i].dead)
-				this.removeEntity(ents[i]);
+				if(!ents[i] || ent.dead)
+				{
+					this.removeEntity(ent);
+					ent.offBlock();
+				}
+				else if(this.game.getBlockX(ent.locx)!=this.x){//已经不在这个区块,那么会试图联系新区块
+					//ent.offBlock();
+					this.removeEntity(ent);
+					
+					ent.enterBlock();
+				}
 				
-				
+				else this.game.loadBlocksNearby(ents[i].locx);
+			
+						
 		this.activeTicks=1000;
 		}
 		
@@ -86,6 +146,11 @@ class Block{
 		for(let i=0;i<brks.length;i++)
 			brks[i].doTick();
 		
+		if(this.needSync && this.game.server){
+			this.sendSyncPacket();
+			this.needSync=false;
+		}
+		this.doPackethandle();
 		
 		//if(this.activeTicks--<=0)
 		//	this.game.unloadBlock(this.x);
@@ -116,6 +181,107 @@ class Block{
 		this.bricksX[x]["_keys"]=Object.keys(this.bricksX[x]);
 
 		delete this.bricks[key];
+	}
+	handlePacket(pk){
+		this.packets.push(pk);
+	}
+	doPackethandle(){
+		
+		for(let j=0;j<this.packets.length/50;j++){
+			let pk=this.packets.shift();
+			if(!pk)break;
+			
+		let keys={};
+		for(var i in pk.entities){
+			keys[pk.entities[i].destentityid]=i;
+		}
+		for(var i in keys)
+		{
+			let en=pk.entities[keys[i]];
+			//console.log(en);
+			let ent=this.game.getEntityNearBX(this.game.getBlockX(en.locx),en.destentityid);
+			
+			if(!ent){
+				//console.log("dont exists",en,crc(this.game.MPlayer.name));
+				
+				//if(this.game.MPlayer && this.game.MPlayer.attach.ent == this.entities[i])continue;
+			
+
+				if(en.destcls=="player"){
+					console.log("player");
+					let name=en.entname;
+					if(name==this.game.MPlayer.name)continue;
+					ent=new Player(name,en.locx,en.locy,this.game);
+					console.log("player2");
+					ent.entityId=en.destentityid;
+					//this.setEntity(ent);
+					this.game.addPlayer("",ent);
+				}else{
+					
+						console.log("unmeet",en.destentityid,Object.keys(this.entities));
+					
+					//	console.log(en.destentityid,this.entities,this.entities[en.destentityid]);
+						ent=new (eval(en.entname))(undefined,en.locx,en.locy,this.game);
+						ent.entityId=en.destentityid;					
+						
+						/*if(en.entityattach>0){
+							let target=this.game.getEntityNearBX(this.x,en.entityattach);
+							//target.clearAttach();
+							//console.log("doAt",en,ent,en.entityattach);
+							target.doAttach(ent,true);
+						}*/
+						
+						ent.enterBlock();
+						
+					
+				}
+			}
+			
+				ent.handleEntityPacket(en);
+					
+		}
+			
+		for(var i in this.entities){
+			//console.log(i,keys,this.game.MPlayer.entityId);
+			if(!keys[i]){
+				if(this.game.MPlayer && this.game.MPlayer.entityId == i){console.log("self");continue;}
+				if(this.entities[i].attach)continue;
+				
+				
+				this.removeEntity(this.entities[i]);
+			}
+		}
+		
+		}
+	}
+	sendSyncPacket(){
+		//let bt=Object.values(this.game.blocks).map((v)=>v.x);
+		
+		console.log("blocksync",this.x);
+		let pk={
+			type:"blockPacket",
+			destcls:"block",
+			bx:this.x,
+			entities:this.buildEntities()
+		}
+		//console.log("built",this.buildEntities())
+
+		if(this.game.server){
+			for(var i in this.game.players)
+			{
+				let ply=this.game.players[i];
+				let pbx=this.game.getBlockX(ply.locx);
+				if(pbx<=this.x+1  && pbx>=this.x-1){
+					
+				//	pk.destname=ply.name;
+					this.game.server.sendPacket(this.game.getPlayerConn(ply),pk);
+				}
+			}
+		//	console.log(pk);
+		}else{
+			if(this.game.network)
+			this.game.network.sendPacket(pk);
+		}
 	}
 	inside(nowlocx,nowlocy,mywidth,myheight,except,vector){
 			
@@ -305,5 +471,7 @@ class Block{
 		}
 	}
 	
-}window.Block=Block;
+}
+
 Block.width=Brick.width*40;
+if(typeof(global)!="undefined")global.Block=Block;

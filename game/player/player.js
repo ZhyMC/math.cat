@@ -6,9 +6,12 @@ var sgn=(x)=>{
 		return -1;
 }
 class Player extends Entity{
-	constructor(x,y,game){
+	constructor(name,x,y,game){
 		super(undefined,x,y,game);
-		this.name="player";
+		this._name="Player";
+		this.entityId=crc(name);
+		this.name=name;
+		
 		this.game=game;
 		//this.handed=new Pickaxe({type:"hand",ent:this,offset:{x:-10,y:12}},x,y,this.game);
 		//this.handed=new Gun({type:"hand",ent:this,offset:{x:-58,y:18}},x,y,this.game);
@@ -19,7 +22,7 @@ class Player extends Entity{
 		this.model.height=60;
 		
 		this.model.bWidth=20;
-		this.model.bHeight=35;
+		this.model.bHeight=50;
 		
 		this.model.imagename="models/player_0.png"
 		
@@ -40,7 +43,10 @@ class Player extends Entity{
 		
 		this.pickstate=false;
 		this.statusInfo.nowMovingStatus=0;
+		
+		this.needSync=false;
 	}
+
 	watchChest(state){
 		if(state){
 		let nearest=this.game.getEntitiesNearby(this.locx,this.locy,1,true);
@@ -69,7 +75,7 @@ class Player extends Entity{
 			}
 		}
 	}
-	pick(state){
+	tryPick(state){
 		if(!this.backed)return;
 			
 		if(state && !this.pickstate)
@@ -87,53 +93,95 @@ class Player extends Entity{
 	}
 	tryAttach(state){
 		if(state)
-		this.wantAttach=true;
+		{
+			this.wantAttach=true;	
+		}
 		else{
-		this.wantAttach=false;
-		this.hand(false);
+			this.wantAttach=false;
 		}
 	}
-	doAttach(ent){
+	clearAttach(type){
+		if(type=="hand"){
+		if(this.handed)
+		this.handed.attach=undefined;
+		this.handed=undefined;
+		}else if(type=="back"){
+		if(this.backed)
+		this.backed.attach=undefined;
+		this.backed=undefined;
+		}else{
+		if(this.handed)
+		this.handed.attach=undefined;
+		this.handed=undefined;
+		if(this.backed)
+		this.backed.attach=undefined;
+		this.backed=undefined;	
+		}
+	}
+	doAttach(ent,force){
 		let type=ent.attachType;
 		let attachinfo={type,ent:this};
 			
 		if(type=="back"){
-			if(this.backed)return false;
+			if(this.backed &&!force)return false;
 			attachinfo.offset={x:20,y:20};
 			ent.attach=attachinfo;
+			//ent.doMoveTick();
 			this.backed=ent;
 			
 		}
 		else if(type=="hand")
 		{
-			if(this.handed)return false;
+			if(this.handed && !force)return false;
 			attachinfo.offset={x:-ent.model.width,y:20};
 			ent.attach=attachinfo;
+			//ent.doMoveTick();
 			this.handed=ent;
 			
 		}else return false;
 		
 		return true;
 	}
-	back(state){
-		if(this.backed)
-			this.backed.interact(state);
+	doAttachTick(){
+		if(this.wantAttach){
+			let nearest=this.game.getEntitiesNearby(this.locx,this.locy,3,true);
+			
+			let attached=false;
+			for(var i in nearest)
+			{
+			let near=Math.sqrt(Math.pow(this.locx-nearest[i].x,2)+Math.pow(this.locy-nearest[i].y,2));
+				if(near>50)break;
+					if(this.doAttach(nearest[i].ent)){attached=true;break;}
+					
+				
+			}
+			if(!attached){
+				this.interactAttach("hand",true);
+				
+			}
+		//	this.wantAttach=false;
+		}else this.interactAttach("hand",false);
+				
 	}
-	hand(state){
-		if(this.handed)
-			this.handed.interact(state);
-		
+	interactAttach(loc,state){//与ATTACH交互
+		if(loc=="hand"){
+			if(this.handed)
+				this.handed.interact(state);
+		}else if(loc=="back"){
+			if(this.backed)
+				this.backed.interact(state);
+
+		}
 	}
 	rotateHand(angle){//旋转手上的东西
 	if(this.handed)
 			this.handed.rotate(angle);
 	}
-	drophand(state){
-		this.wantDrop=true;
-		
+	tryDropHand(state){
+			if(this.handed){
+				this.wantDrop=true;
+			}
 	}
-	
-	
 	doStatusTick(){
 	
 		if(Math.abs(this.vector.x)>1){
@@ -184,47 +232,61 @@ class Player extends Entity{
 		}
 	
 	}
-	doTick(){
-		if(this.wantDrop){
-			if(this.handed){
+	
+	dumpEntity(ent){//把实体从当前位置弹出
+			ent.locy=this.locy+this.model.height/2;			
 		
-			this.handed.locx=this.locx+this.model.bWidth/2;
-			this.handed.locy=this.locy+this.model.bHeight/2;
-			
-			
-				if(this.face>0.5)
-				this.handed.vector.x=5;
-				else
-				this.handed.vector.x=-5;
-					
-			
-			this.handed.attach=undefined;
-		
-			this.handed.vector.y=5;
-			
-			this.handed=undefined;
-			}
-			this.wantDrop=false
-		}
-		
-		if(this.wantAttach){
-			
-			let nearest=this.game.getEntitiesNearby(this.locx,this.locy,3,true);
-						let attached=false;
-			for(var i in nearest)
+			if(this.face>0.5)
 			{
-			let near=Math.sqrt(Math.pow(this.locx-nearest[i].x,2)+Math.pow(this.locy-nearest[i].y,2));
-				if(near>50)break;
-					if(this.doAttach(nearest[i].ent)){attached=true;break;}
-					
-				
+				ent.locx=this.locx+this.model.width/2;
+				ent.vector.x=5;
 			}
-			if(!attached){
-				this.hand(true);
-				
-			}
-			this.wantAttach=false;
+			else{
+				ent.locx=this.locx-ent.model.width+this.model.width/2;	
+				ent.vector.x=-5;
+			}	
+			ent.vector.y=5;
+			
+	}
+	offBlock(){
+		this.drop("hand");
+		this.drop("back");
+		Entity.prototype.offBlock.call(this);
+		
+	}
+	doDropingTick(){
+		if(this.wantDrop){
+			this.drop("hand");
+			this.wantDrop=false;
 		}
+	}
+	drop(loc){
+		if(loc=="hand")
+		{
+			if(this.handed){
+			this.dumpEntity(this.handed);
+			this.handed.attach=undefined;
+			this.handed=undefined;
+						
+			
+			}
+		}
+		else if(loc=="back")
+		{
+			if(this.backed){
+			
+			this.backed.attach=undefined;
+			this.backed=undefined;
+			}
+		}
+	}
+	doTick(){
+		Entity.prototype.doTick.call(this);
+	
+		
+		this.doDropingTick();
+		this.doAttachTick();
+		
 		if(this.wantPick){
 			let nearest=this.game.getEntitiesNearby(this.locx,this.locy,1,true);
 			
@@ -243,11 +305,10 @@ class Player extends Entity{
 			this.wantPick=false;
 			
 		}
-		Entity.prototype.doTick.call(this);
 	
-		
+	
 	}
 	
 }
-
-window.Player=Player;
+if(typeof(global)!="undefined")
+global.Player=Player;

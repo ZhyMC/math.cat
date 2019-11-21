@@ -42,4 +42,4 @@ class Brick{
 }
 
 Brick.width=40;
-window.Brick=Brick;
+if(typeof(global)!="undefined")global.Brick=Brick;

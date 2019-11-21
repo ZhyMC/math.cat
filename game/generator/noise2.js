@@ -2,6 +2,8 @@
   if (typeof exports === 'object') { module.exports = factory(); }
   else if (typeof define === 'function' && define.amd) { define(factory); }
   else { root.NoiseMap = factory(); }
+  if(typeof(global)!="undefined")
+	  global.NoiseMap=factory();
 }(this, function () {
   'use strict';
 
@@ -203,7 +205,7 @@
 
   MapGenerator.prototype = {
     setSeed: function (seed) {
-      var s = parseInt(seed) || Math.random();
+      var s = parseInt(seed) || 1;
       if (s < 0) {
         s *= -1;
       }
@@ -412,3 +414,6 @@
     Colorizer: Colorizer
   };
 }));
+
+if(typeof(global)!="undefined")
+global.NoiseMap=NoiseMap;

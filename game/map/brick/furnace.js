@@ -7,4 +7,4 @@ class Furnace extends Brick{
 
 
 
-window.Furnace=Furnace;
+if(typeof(global)!="undefined")global.Furnace=Furnace;

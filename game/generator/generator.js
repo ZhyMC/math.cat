@@ -4,7 +4,7 @@ class Generator{
 		this.blockLen=Block.width;
 		this.terrians=["sand","flat","forest"]
 		this.block=block;
-		let mapg=new NoiseMap.MapGenerator();
+		let mapg=new NoiseMap.MapGenerator(this.seed);
 		this.linemaps=[];//一维地图
 		this._2dmaps=[];//二维地图
 		
@@ -79,5 +79,5 @@ class Generator{
 			}
 	}
 }
-
-window.Generator=Generator;
+if(typeof(global)!="undefined")global.Generator=Generator;
+else window.Generator=Generator;

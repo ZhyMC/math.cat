@@ -1,3 +1,4 @@
+
 var sleep=(t)=>new Promise((y)=>setTimeout(y,t));
 
 class Game{
@@ -8,39 +9,58 @@ class Game{
 			this.tps_=0;
 		},1000);
 		this.blocks={};
+		this.entities={};
+		
+		this.players={};
+		this.playersNameSet={};
+		this.playersConnSet={};
+		
+		
 		this.map=map;
+		
 		this.tick=0;
-
+		
 
 		this.button={};//正在被按住
 		this.lights={};this._lightsSet=new Set();this.__lightsSet=[];//光照
-		
-		new Gun(undefined,10,40*70,this);
-		new LightGun(undefined,300,40*70,this);
-		new Pickaxe(undefined,400,40*70,this);
-		new Bow(undefined,500,40*70,this);
-		new Player(200,40*40,this)
-		new Chest(undefined,600,40*70,this);
-		new Pack(undefined,this)
-		new Torch(undefined,600,40*70,this)
-		
 		
 		
 		new ParaLight(this);
 		new VisualLight(this);
 		
 		
-		window.requestAnimationFrame(()=>this.eventLoop());
+		if(typeof(global)!="undefined")
+		this.eventLoop();
+		else
+		window.requestAnimationFrame(()=>this.eventLoop2());
+		
+		this.server=undefined;
+		
+		//new Gun(undefined,10,40*70,this).enterBlock();
+	
 		
 	}
-	setPlayer(){
-		if(!this.MPlayer)
-			this.MPlayer=new Player(50,40*70,this);
+	getEntity(id){
+		return this.entities[id];
 	}
+	setMPlayer(ply){
+		//this.players[ply.name]=ply;
+		//if(!this.MPlayer && Object.keys(this.players).length==1)
+		ply.enterBlock();
+		this.MPlayer=ply;
+		
+	}
+	
+	
 	setController(controller){
 		this.controller=controller;
 	}
 	loadBlock(blockx){
+		
+		if(isNaN(blockx))
+		{	console.log("error load");
+			
+		}
 	console.log("load",blockx);
 		let b=new Block(blockx,this.map,this);
 		b.load();
@@ -54,24 +74,35 @@ class Game{
 		for(let i=base-1;i<=base+1;i++)
 		this.getBlock(i);//加载区块
 	}
-	eventLoop(){
-	//	while(true){
-			/*for(var i in this.players)
-				this.players[i].doTick();*/
+
+	async eventLoop(){
+		while(true){
 			let cost=new Date().getTime();
 			this.doControllerTick();
 			this.doBlockTick();
-
+			
 			cost-=new Date().getTime();
 			
 			this.tick++;
-		//	if(10+cost>0)
-		//	await sleep(10+cost);
+			if(16.66+cost>0)
+			await sleep(16.66+cost);
 			this.tps_++;
 			
-		//}
+		}
 		
-		window.requestAnimationFrame(()=>this.eventLoop());
+	
+	}
+	eventLoop2(){
+			let cost=new Date().getTime();
+			this.doControllerTick();
+			this.doBlockTick();
+			
+			cost-=new Date().getTime();
+			
+			this.tick++;
+			this.tps_++;
+	
+		window.requestAnimationFrame(()=>this.eventLoop2());
 		
 	}
 	doControllerTick(){
@@ -111,11 +142,11 @@ class Game{
 				else
 					this.MPlayer.tryAttach(false);
 		if(this.controller.button["q"])
-					this.MPlayer.drophand();
+					this.MPlayer.tryDropHand();
 		if(this.controller.button["k"])
-					this.MPlayer.pick(true);//拾起到背包
+					this.MPlayer.tryPick(true);//拾起到背包
 		else
-					this.MPlayer.pick(false);
+					this.MPlayer.tryPick(false);
 		for(let i=1;i<=9;i++)
 		if(this.controller.button[i+""])
 					this.MPlayer.shortcutSelected=i-1;
@@ -161,6 +192,7 @@ class Game{
 			this.selecting=undefined;
 	}
 	doBlockTick(){
+
 		for(var i in this.blocks)
 			this.blocks[i].doTick();
 	}
@@ -206,6 +238,15 @@ class Game{
 		
 		return nearest;
 	}
+	getPlayersNearBy(x,y){
+		let nears=[];
+		for(var i in this.players){
+			let near=Math.sqrt(Math.pow(this.players[i].locx-x,2)+Math.pow(this.players[i].locy-y,2));
+			nears.push({near,ent:this.players[i]});
+		}
+		nears.sort((a,b)=>(a.near-b.near));
+		return nears;
+	}
 	
 	removeEntity(entityid){	
 		
@@ -213,5 +254,5 @@ class Game{
 	
 }
 
-
-window.Game=Game;
+if(typeof(global)!="undefined")
+global.Game=Game;

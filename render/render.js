@@ -173,6 +173,7 @@ class Render{
 		this.buf.fillText("Blocks:"+Object.keys(this.game.blocks).length,0,120);
 		this.buf.fillText("DrawImage():"+this.drawTick,0,140);
 		this.buf.fillText("DisplayBricks:"+this._nowBricksDrawingKeys.size,0,160);
+		this.buf.fillText("EntityId:"+this.game.MPlayer.entityId,0,180);
 	
 		
 		/*let isd;
@@ -479,7 +480,8 @@ class Render{
 			
 			if(update){
 				this.lightUpdates_++;
-			
+
+
 			ctx.clearRect(rect.x,rect.y,rect.w,rect.h);
 			ctx.globalAlpha=1-light;
 			ctx.fillRect(rect.x,rect.y,rect.w,rect.h);

@@ -1,4 +1,4 @@
-window.screenController=class screenController extends Controller{
+class screenController extends Controller{
 	constructor(doc,render){
 		super(doc,render);
 		
@@ -146,3 +146,5 @@ window.screenController=class screenController extends Controller{
 		
 	}
 }
+if(typeof(global)!="undefined")
+	global.screenController=screenController;

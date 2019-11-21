@@ -1,4 +1,4 @@
-class Map{
+class GameMap{
 
 	constructor(name){
 		this.name=name;
@@ -6,4 +6,5 @@ class Map{
 
 }
 
-window.Map=Map;
+if(typeof(global)!="undefined")
+global.GameMap=GameMap;

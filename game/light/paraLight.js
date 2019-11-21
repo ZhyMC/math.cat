@@ -1,4 +1,4 @@
-window.ParaLight=class extends Light{
+class ParaLight extends Light{
 	constructor(game){//平行光(太阳光)
 		super(0,Brick.width*75,game);
 		//this.locx=0;//把平行光寄存于首个区块
@@ -22,3 +22,6 @@ window.ParaLight=class extends Light{
 	}
 	
 }
+
+if(typeof(global)!="undefined")
+	global.ParaLight=ParaLight;

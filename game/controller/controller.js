@@ -37,4 +37,4 @@ class Controller{
 	
 }
 
-window.Controller=Controller;
+if(typeof(global)!="undefined")global.Controller=Controller;

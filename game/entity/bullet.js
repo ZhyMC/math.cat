@@ -3,7 +3,7 @@ class Bullet extends Entity{
 		super(attach,x,y,game);
 		this.aliveTicks=0;
 		this.game=game;
-		this.name="bullet";
+		this._name=this.name="Bullet";
 		
 		this.model.width=10;
 		this.model.height=10;
@@ -21,6 +21,13 @@ class Bullet extends Entity{
 		{
 			this.dead=true;
 		}
+		
+		for(var i in this.insided)
+			if(this.insided[i].inside.isEntity && this.insided[i].inside!=this)
+				//let dire=;	
+				//if(isd.isPlayer)
+				this.insided[i].inside.damage(0.1,{x:(this.vector.x*0.1),y:0});
+			
 	
 		
 	}
@@ -38,4 +45,4 @@ class Bullet extends Entity{
 	}
 }
 
-window.Bullet=Bullet;
+if(typeof(global)!="undefined")global.Bullet=Bullet;

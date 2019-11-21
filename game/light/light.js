@@ -1,4 +1,4 @@
-window.Light=class{
+class Light{
 	constructor(x,y,game){//默认是点光源
 		this.name="Light";
 		this.game=game;
@@ -24,3 +24,5 @@ window.Light=class{
 	
 	
 }
+
+if(typeof(global)!="undefined")global.Light=Light;

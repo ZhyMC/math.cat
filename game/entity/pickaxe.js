@@ -1,6 +1,7 @@
 class Pickaxe extends Entity{
 	constructor(attach,x,y,game){
 		super(attach,x,y,game);
+		this._name="Pickaxe";
 		
 		this.attachinfo={};
 		this.pick=false;
@@ -62,5 +63,5 @@ class Pickaxe extends Entity{
 				
 	}
 }
-
-window.Pickaxe=Pickaxe;
+if(typeof(global)!="undefined")
+global.Pickaxe=Pickaxe;

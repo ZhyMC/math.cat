@@ -1,4 +1,4 @@
-window.VisualLight=class extends Light{
+class VisualLight extends Light{
 	constructor(game){//这是一种特殊光,玩家自身会产生一点光当做视野
 		super(0,0,game);
 		this.name="VisualLight";
@@ -20,3 +20,5 @@ window.VisualLight=class extends Light{
 	}
 	
 }
+if(typeof(global)!="undefined")
+	global.VisualLight=VisualLight;

@@ -58,5 +58,5 @@ class Chest extends Entity{
 }
 
 
-window.Chest=Chest;
+if(typeof(global)!="undefined")global.Chest=Chest;
 Chest.maxspace=20;

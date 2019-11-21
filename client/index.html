@@ -1,0 +1,150 @@
+<html>
+<head>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+</head>
+<body style="background:#000;margin:0;">
+
+<div id="loadingframe" style="z-index:999;position:absolute;top:40vh;width:100vw;display:flex;flex-direction:row;justify-content:center;">
+<div style="border:1px solid black;padding:5px;">
+<div id="loading" style="text-align:center;width:fit-content;height:fit-content;background:#FFF;color:red;">
+资源加载中
+<div id="loadinginfo" style="color:#000;">loading...</div>
+</div>
+</div>
+</div>
+<div id="container" style="width:100vw;height:100vh;position:absolute;top:0;width:fit-content;height:fit-content;">
+	<div style="width:100vw;">
+	<canvas style="margin:0 auto;display:block;width:100vw;height:100vh;" width="1024" height="720" id="game"></canvas>
+	</div>
+		<div id="arrowbar" style="position:absolute;left:20px;bottom:20px;width:18vw;height:9vw;background:rgba(0,0,0,0.2);">
+			<div id="arrowleft" style="position:absolute;left:0px;bottom:0px;background:url('../render/resources/screenController/arrowleft.png');background-size:cover;width:9vw;height:9vw;"></div>
+			<div id="arrowright" style="position:absolute;right:0px;bottom:0px;background:url('../render/resources/screenController/arrowright.png');background-size:cover;width:9vw;height:9vw;"></div>
+
+		</div>
+		
+		<div id="fullscreen" style="position:absolute;border:1px solid #000; right:20px;top:20px;width:fit-content;height:20px">
+			启动全屏
+		</div>
+		
+		<div id="keybar" style="position:absolute;right:20px;bottom:20px;width:30vw;height:16vw;">
+			<div id="keyJ" style="position:absolute;right:9vw;bottom:10px;background:url('../render/resources/screenController/arrowleft.png');background-size:cover;width:8vw;height:8vw;"></div>
+			<div id="keyQ" style="position:absolute;right:10px;bottom:9vw;background:url('../render/resources/screenController/arrowright.png');background-size:cover;width:8vw;height:8vw;"></div>
+			<div id="keyK" style="position:absolute;right:9vw;bottom:9vw;background:url('../render/resources/screenController/arrowdown.png');background-size:cover;width:8vw;height:8vw;"></div>
+				
+			<div id="arrowup" style="position:absolute;right:10px;bottom:10px;background:url('../render/resources/screenController/arrowup.png');background-size:cover;width:8vw;height:8vw;"></div>		
+			
+		</div>
+		
+		
+</div>
+	
+	
+	
+</body>
+<script src="../game/utils/crc32.js"></script>
+
+<script src="../game/generator/noise2.js"></script>
+<script src="../game/map/brick/brick.js"></script>
+<script src="../game/generator/generator.js"></script>
+
+<script src="../game/light/light.js"></script>
+<script src="../game/light/visualLight.js"></script>
+<script src="../game/light/paraLight.js"></script>
+
+
+
+<script src="../game/entity/entity.js"></script>
+<script src="entity/entity.js"></script>
+
+<script src="../game/entity/pickaxe.js"></script>
+<script src="../game/entity/bullet.js"></script>
+<script src="../game/entity/gunlight.js"></script>
+<script src="../game/entity/lightgun.js"></script>
+<script src="../game/entity/gun.js"></script>
+<script src="../game/entity/bow.js"></script>
+<script src="../game/entity/arrow.js"></script>
+<script src="../game/entity/torch.js"></script>
+<script src="../game/chest/chest.js"></script>
+<script src="../game/chest/pack.js"></script>
+
+<script src="../game/controller/controller.js"></script>
+<script src="../game/controller/screenController.js"></script>
+
+<script src="../game/player/player.js"></script>
+<script src="player/player.js"></script>
+<script src="../game/block/block.js"></script>
+<script src="../game/utils/msgpack.js"></script>
+<script src="../game/game.js"></script>
+<script src="../game/map/brick/rock.js"></script>
+<script src="../game/map/brick/grass.js"></script>
+<script src="../game/map/brick/furnace.js"></script>
+<script src="../game/map/brick/brickcoal.js"></script>
+<script src="../game/map/map.js"></script>
+<script src="../network/websocket/networkc.js"></script>
+<script src="../render/render.js"></script>
+<script src="../render/resourcemanager.js"></script>
+<script src="../network/packet.js"></script>
+
+
+<script src="Client.js"></script>
+
+
+<script>
+console.log("Game Start ## Powered BY WyattZheng");
+
+		function isMobile(){
+			var browser={ 
+				versions:function(){ 
+				var u = navigator.userAgent, app = navigator.appVersion; 
+				return {//移动终端浏览器版本信息 
+				trident: u.indexOf('Trident') > -1, //IE内核 
+				presto: u.indexOf('Presto') > -1, //opera内核 
+				webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核 
+				gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核 
+				mobile: !!u.match(/AppleWebKit.*Mobile.*/)||!!u.match(/AppleWebKit/), //是否为移动终端 
+				ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端 
+				android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器 
+				iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者QQ HD浏览器 
+				iPad: u.indexOf('iPad') > -1, //是否iPad 
+				webApp: u.indexOf('Safari') == -1 //是否web应该程序，没有头部与底部 
+				}; 
+				}(), 
+				language:(navigator.browserLanguage || navigator.language).toLowerCase() 
+				} 
+				
+			return browser.versions.android;
+		}
+var canvas=document.getElementById("game");
+if(isMobile())
+{	canvas.width=768;
+	canvas.height=540;
+}
+	
+var map=new GameMap("123");
+var game=new Client(Math.random()+"",map);
+
+var loadinginfo=document.getElementById("loadinginfo");
+//var resourcemanager=
+new ResourceManager("../render/resources/",["models/arrow.png","models/back2_close.png","models/back2_open.png","models/back_close.png","models/back_open.png","models/bgremove.py","models/bow_0.png","models/bow_1.png","models/bow_2.png","models/bow_3.png","models/brick_coal.png","models/bullet.png","models/charcoal.png","models/chest_close.png","models/chest_open.png","models/furnace.png","models/furnacemonster.png","models/furnacemonster_angry.png","models/furnace_working.png","models/grass.png","models/gun.png","models/gunlight.png","models/lightgun.png","models/pickaxe.png","models/player_0.png","models/player_1.png","models/player_2.png","models/player_3.png","models/player_4.png","models/player_5.png","models/player_6.png","models/player_7.png","models/player_8.png","models/player_hand_0.png","models/player_hand_1.png","models/player_hand_2.png","models/player_hand_3.png","models/player_hand_4.png","models/player_hand_5.png","models/player_hand_6.png","models/player_hand_7.png","models/player_hand_8.png","models/rock.png","models/rock1.png","models/rock2.png","models/torch.png","screenController/arrowdown.png","screenController/arrowleft.png","screenController/arrowright.png","screenController/arrowup.png"],(msg,i,len)=>{
+		loadinginfo.innerText=msg+" ("+i+"/"+len+")";
+	},()=>{
+		console.log("preload end");
+		document.getElementById("loading").style.display="none";
+		document.getElementById("loadingframe").style.display="none";
+		
+		loadinginfo.style.display="none";
+	}).init().then((resourcemanager)=>{
+	
+	let render=new Render(game,canvas,resourcemanager);
+	let ctrl=new screenController(document,render);
+	game.setController(ctrl);
+	
+});
+
+
+
+
+</script>
+
+
+</html>

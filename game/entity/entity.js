@@ -8,11 +8,13 @@ var sgn=(x)=>{
 
 class Entity{
 	constructor(attach,x,y,game){
+		this._name="Entity";
 		
 		this.attach=attach;
 		this.game=game;
-		this.entityId=Math.random()+"";
+		this.entityId=100000+parseInt(Math.random()*1000000);
 		//this.game.getBlockOutsided(x).entities[this.entityId]=this;
+		
 		
 		this.visiable=true;
 
@@ -21,9 +23,12 @@ class Entity{
 		this.locy=y;
 		
 		
+		
 		this.vector={x:0,y:0};//速度	
 		
 		this.face=0;//朝向[0-1],0-0.5望向左边,0.5到1望向右边
+		
+		
 		
 		this.model={//模型:规定了实体的二维面积,形状等
 			width:20,
@@ -35,6 +40,7 @@ class Entity{
 			bHeight:~~(Brick.width*0.8)
 		}
 		
+		this.lastMovementSent={x,y,face:this.face,modelrotate:this.model.rotate};
 		
 		this.isEntity=true;
 		this.lightness=0;//自身是否光源,大于0代表是光源,数值代表光的亮度
@@ -47,7 +53,8 @@ class Entity{
 		
 		this.interactEvent={
 			ticks:0,
-			ended:true
+			ended:true,
+			caused:0
 		}
 		this.canpick=false;
 		
@@ -74,25 +81,38 @@ class Entity{
 		this.maxSpeed=10;//最快速度,超过这个速度,碰撞箱可能会被越过
 		
 		this.offedBlock=true;
-		this.enterBlock();
+	//	this.enterBlock();
+		
+		
+		this.needSync=false;
+	}
+	rotate(){
 		
 	}
-
+	isOffBlock(){
+		if(this.offedBlock)return true;
+		return false;
+	}
+	
 	offBlock(){//离开区块
 		this.offedBlock=true;
 	
 		this.doStatusTick();
-		this.game.getBlockOutsided(this.locx).removeEntity(this);		
-		
+		this.game.getBlockOutsided(this.locx).removeEntity(this);
+	
 	}
 	enterBlock(){//回到区块
 	//	console.log(this.game.getBlockOutsided(this.locx),this.locx)
+	
 		if(this.offedBlock){
 		this.offedBlock=false;
 		this.doStatusTick();
 		}
 		this.game.getBlockOutsided(this.locx).setEntity(this);
+
 		
+	}
+	doStatusTick(){
 		
 	}
 	setHealth(val){
@@ -144,7 +164,6 @@ class Entity{
 	
 	}
 	updateNearBlock(){
-		
 		this.game.loadBlocksNearby(this.locx);
 		//this.game.getBlockOutsided(this.locx).entities[this.entityId]=this;	
 		
@@ -152,7 +171,10 @@ class Entity{
 	interact(state){
 		if(state){
 			if(this.interactEvent.ended==true)
+			{	
 				this.interactEvent.ended=false;	
+				this.interactEvent.caused=this.entityId;
+			}
 		}
 		else{
 			
@@ -165,15 +187,15 @@ class Entity{
 			}
 			
 		}
+	
 	}
+	
+	
 	setLocOffset(offsetx,offsety){
 		
 		this.locx+=offsetx;
 		this.locy+=offsety;
 		this.updateNearBlock();
-		
-	}
-	rotate(){
 		
 	}
 	ifInside(x,y,width,height,objbuf){//判断是否在内部
@@ -204,6 +226,7 @@ class Entity{
 			this.face=this.attach.ent.face;
 			if(this.attach.ent.face<0.5)
 			{
+				//console.log(this.attach.ent.locx,this.attach.offset.x)
 				this.locx=this.attach.ent.locx+this.attach.offset.x;
 				this.locy=this.attach.ent.locy+this.attach.offset.y;
 				
@@ -221,7 +244,6 @@ class Entity{
 			
 		//	this.vector.x=this.attach.ent.vector.x;
 			//this.vector.y=this.attach.ent.vector.y;
-			
 			return;
 		}	
 		
@@ -412,6 +434,9 @@ class Entity{
 	else
 		this.smoothHealth+=val;
 	}
+	
+	
+	
 	doTick(){
 		this.doMoveTick();	
 		this.doStatusTick();
@@ -431,9 +456,15 @@ class Entity{
 		
 		this.updateNearBlock();
 		this.enterBlock();
-	//	this.visiable=true;
 	
+		
 	}
 	
 }
-window.Entity=Entity;
+/*
+Entity.ENTSET={
+	"Player":Player,
+	""
+}*/
+if(typeof(global)!="undefined")
+global.Entity=Entity;

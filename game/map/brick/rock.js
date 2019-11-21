@@ -7,4 +7,4 @@ class Rock extends Brick{
 
 
 
-window.Rock=Rock;
+if(typeof(global)!="undefined")global.Rock=Rock;

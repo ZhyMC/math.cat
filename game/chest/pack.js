@@ -49,5 +49,5 @@ class Pack extends Chest{
 	
 }
 
-window.Pack=Pack;
+if(typeof(global)!="undefined")global.Pack=Pack;
 Pack.len=5;

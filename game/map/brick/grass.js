@@ -7,4 +7,4 @@ class Grass extends Brick{
 
 
 
-window.Grass=Grass;
+if(typeof(global)!="undefined")global.Grass=Grass;

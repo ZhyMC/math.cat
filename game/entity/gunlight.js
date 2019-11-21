@@ -4,32 +4,24 @@ class GunLight extends Entity{
 		this.aliveTicks=0;
 		this.maxTicks=100;
 		
-		this.visiable=false;
-		this.model.width=1000;
+		this.model.width=100;
 		this.model.height=25;
-		this.name="gunlight";
+		this._name=this.name="GunLight";
+		this.model.imagename="models/gunlight.png";
 		
-		console.log("gunlight",this.loc)
-	}
-	clear(){
-	//	delete this.game.getBlockOutsided(this.loc.x).entities[this.entityId];
 	}
 	doStatusTick(){
-		this.model.imagename="models/gunlight.png";
-		if(this.aliveTicks>=this.maxTicks)
+	/*	if(this.aliveTicks>=this.maxTicks)
 		{	this.visiable=false;
 			this.aliveTicks=this.maxTicks;
-		}
-		
+		}*/
 	}
 	doInteractTick(){
 		
 	}
-	/*doMoveTick(){
-		
-	}*/
+
 	onInteractEnded(){
 	}
 }
 
-window.GunLight=GunLight;
+if(typeof(global)!="undefined")global.GunLight=GunLight;

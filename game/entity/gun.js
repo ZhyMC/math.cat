@@ -6,8 +6,9 @@ class Gun extends Entity{
 		this.canpick=true;
 		this.maxCapa=20;
 		this.capa=50;
-		this.name="gun";
+		this._name=this.name="Gun";
 		this.attachType="hand";
+		this.bulletid=0;
 		
 	}
 	chargeBullets(bullets){
@@ -20,22 +21,23 @@ class Gun extends Entity{
 	}
 	doInteractTick(){
 		if(!this.attach)return;
+		Entity.prototype.doInteractTick.call(this);
 		
-		this.interactEvent.ticks++;
-	
-		if(this.interactEvent.ticks%10==0 && this.capa>0)
+		if(this.interactEvent.ticks%10==0 && this.capa>0 && !this.interactEvent.ended)
 		{
 			let bl;
 			if(this.face>0.5)
 				bl=new Bullet(undefined,this.attach.ent.locx+70,this.attach.ent.locy+30,this.game);
 			else
 				bl=new Bullet(undefined,this.attach.ent.locx-70,this.attach.ent.locy+30,this.game);
-			
+		//	bl.entityId=crc(this.entityId+""+(this.bulletid++));
+			console.log("gen",bl.entityId);
 		if(this.attach.ent.face>0.5)
-			bl.vector.x=8;
+			bl.vector.x=20;
 		else
-			bl.vector.x=-8;
+			bl.vector.x=-20;
 
+		bl.enterBlock();
 		this.capa-=0.25;
 		}
 		
@@ -44,4 +46,4 @@ class Gun extends Entity{
 	}
 }
 
-window.Gun=Gun;
+if(typeof(global)!="undefined")global.Gun=Gun;
