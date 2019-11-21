@@ -41,7 +41,8 @@
 	
 	
 </body>
-<script src="game/generator/noise.js"></script>
+<script src="game/utils/crc32.js"></script>
+
 <script src="game/generator/noise2.js"></script>
 <script src="game/map/brick/brick.js"></script>
 <script src="game/generator/generator.js"></script>
@@ -69,18 +70,22 @@
 
 <script src="game/player/player.js"></script>
 <script src="game/block/block.js"></script>
+<script src="game/utils/msgpack.js"></script>
 <script src="game/game.js"></script>
-<script src="render/resourcemanager.js"></script>
 <script src="game/map/brick/rock.js"></script>
 <script src="game/map/brick/grass.js"></script>
 <script src="game/map/brick/furnace.js"></script>
 <script src="game/map/brick/brickcoal.js"></script>
-
 <script src="game/map/map.js"></script>
-
-
+<script src="game/network/websocket/networkc.js"></script>
 <script src="render/render.js"></script>
+<script src="render/resourcemanager.js"></script>
+<script src="game/network/packet.js"></script>
+
 <script>
+
+window.location.href="client/index.html";
+/*
 console.log("Game Start ## Powered BY WyattZheng");
 
 		function isMobile(){
@@ -111,9 +116,12 @@ if(isMobile())
 	canvas.height=540;
 }
 	
-var map=new Map("123");
+var map=new GameMap("123");
 var game=new Game(map);
-game.setPlayer();
+let player=new Player(Math.random()+"",50,40*70,game);
+
+game.setMPlayer(player);
+
 var loadinginfo=document.getElementById("loadinginfo");
 //var resourcemanager=
 new ResourceManager("render/resources/",["models/arrow.png","models/back2_close.png","models/back2_open.png","models/back_close.png","models/back_open.png","models/bgremove.py","models/bow_0.png","models/bow_1.png","models/bow_2.png","models/bow_3.png","models/brick_coal.png","models/bullet.png","models/charcoal.png","models/chest_close.png","models/chest_open.png","models/furnace.png","models/furnacemonster.png","models/furnacemonster_angry.png","models/furnace_working.png","models/grass.png","models/gun.png","models/gunlight.png","models/lightgun.png","models/pickaxe.png","models/player_0.png","models/player_1.png","models/player_2.png","models/player_3.png","models/player_4.png","models/player_5.png","models/player_6.png","models/player_7.png","models/player_8.png","models/player_hand_0.png","models/player_hand_1.png","models/player_hand_2.png","models/player_hand_3.png","models/player_hand_4.png","models/player_hand_5.png","models/player_hand_6.png","models/player_hand_7.png","models/player_hand_8.png","models/rock.png","models/rock1.png","models/rock2.png","models/torch.png","screenController/arrowdown.png","screenController/arrowleft.png","screenController/arrowright.png","screenController/arrowup.png"],(msg,i,len)=>{
@@ -132,6 +140,7 @@ new ResourceManager("render/resources/",["models/arrow.png","models/back2_close.
 	
 });
 
+*/
 
 
 </script>
