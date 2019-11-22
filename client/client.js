@@ -97,7 +97,6 @@ class Client extends Game{
 			break;
 			case "spawnEntityPacket":
 			{
-				console.log(pk);
 			let ent;
 			if(pk.entname=="Player")
 			ent=new Player(pk.pk.entname,pk.pk.locx,pk.pk.locy,this);	

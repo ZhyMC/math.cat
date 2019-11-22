@@ -10,7 +10,7 @@ var _Entity=Entity;
 Entity=class extends _Entity{
 	constructor(attach,x,y,game){
 		super(attach,x,y,game);
-		this.lastMovementSent={x,y,face:this.face,modelrotate:this.model.rotate,flip:false};
+		this.lastMovementSent={x,y,face:this.face,modelrotate:this.model.rotate,flip:false,sendTicks:0};
 		this.packetsToHandle=[];
 		this.needSync=false;
 		this.fakeInteractEvent={
@@ -34,7 +34,7 @@ Entity=class extends _Entity{
 		
 	}
 	dohandlePacketTick(){
-		let hlds=Math.max(1,this.packetsToHandle.length/10);
+		let hlds=Math.max(1,this.packetsToHandle.length/60);
 		//10这个数值和帧率有关,数值太小会导致网络帧过渡不平滑,太小会导致时间延迟
 		for(let i=0;i<hlds;i++){
 		let pk=this.packetsToHandle.shift();
@@ -43,7 +43,7 @@ Entity=class extends _Entity{
 		switch(pk.type){
 			case "entityPacket":
 				//console.log(this.locx,this.locy,pk);
-				console.log(pk);
+				
 				this.handleEntityPacket(pk);				
 			break;
 			case "removeEntityPacket":
@@ -168,14 +168,15 @@ Entity=class extends _Entity{
 			
 				this.face=pk.face;
 			if(!this.attach){
-				//if(Math.abs(this.locx-pk.locx)>2)
+				if(Math.abs(this.locx-pk.locx)>2)	
 					this.locx=pk.locx;
-				//if(Math.abs(this.locy-pk.locy)>2)
+				if(Math.abs(this.locy-pk.locy)>2)
 					this.locy=pk.locy;
 			
-				//if(Math.abs(this.vector.x-pk.vectorx)>0.1)
+				if(Math.abs(this.vector.x-pk.vectorx)>0.2)
 					this.vector.x=pk.vectorx;
-				//if(Math.abs(this.vector.y-pk.vectory)>0.1)
+				
+				if(Math.abs(this.vector.y-pk.vectory)>0.2)
 					this.vector.y=pk.vectory;
 				}
 				this.model.rotate=pk.extras[4];

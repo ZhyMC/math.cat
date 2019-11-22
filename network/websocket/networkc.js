@@ -8,9 +8,13 @@ class NetworkC{
 		//this.reconnect();
 		this.queue=[];
 		this.onpacket=()=>{};
-	
 		this.eventLoop();
 		
+		this._pkcount=0;
+		this.timegap=1;
+		
+		this.lastTime=0;
+		this.PacketsPerSecond=0;
 	}
 	setGame(game){
 		this.game=game;
@@ -39,6 +43,15 @@ class NetworkC{
 	}
 	async eventLoop(){
 		while(true){
+			
+			let time=new Date().getTime();
+			if(time>this.lastTime+1000)
+			{
+				this.lastTime=time;
+				this.PacketsPerSecond=this._pkcount;
+				this._pkcount=0;
+			}
+			
 			if(!this.ready || this.sock.readyState!=1)
 			{	
 				this.ready=false;
@@ -54,16 +67,22 @@ class NetworkC{
 			}
 			let batchPacket={
 				type:"batchPacket",
-				packets:this.queue.slice(0,50).concat([])
+				packets:this.queue.slice(0,100).concat([])
 			}
-			this.queue.splice(0,50);
+			if(this.queue.length>20)
+				console.log(this.queue)
 			
-			
-			
+			this.queue.splice(0,100);
+		
 		//	console.log(JSON.stringify(batchPacket).length,batchPacket.packets.length);
-				this.sock.send(Packet.encode(batchPacket));
+			
+			
+			this.sock.send(Packet.encode(batchPacket));
+				this._pkcount++;
+				
 			//	console.log("send",JSON.stringify(batchPacket))
-			await sleep(10);
+			await sleep(this.timegap);
+			
 		}
 	}
 	async sendPacket(pk){//packet将是一个对象 

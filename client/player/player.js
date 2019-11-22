@@ -1,6 +1,7 @@
 var p=Player;Player=class extends p{
 	constructor(name,x,y,game){
 		super(name,x,y,game);
+		this.attachState=false;
 		
 	}
 	sendMovement(){
@@ -13,7 +14,7 @@ var p=Player;Player=class extends p{
 		this.lastMovementSent.handentityid=this.handed?this.handed.entityId:0;
 		this.lastMovementSent.backentityid=this.backed?this.backed.entityId:0;
 		this.lastMovementSent.modelrotate=this.model.rotate;
-		
+		this.lastMovementSent.sendTicks=this.game.tick;
 	}
 	
 	sendSyncPacket(){
@@ -75,9 +76,22 @@ var p=Player;Player=class extends p{
 			destname:this.name,
 			state
 		}
-		this.game.network.sendPacket(pk);
+		if(state){
+			if(!this.attachState){
+				this.attachState=true;
+			}
+		
+			this.game.network.sendPacket(pk);
+		
+		}else{
+			if(this.attachState){
+				this.attachState=false;
+				this.game.network.sendPacket(pk);
+			}
+		}
 	}
-	tryDropHand(){
+	tryDropHand(state){
+		if(state){
 		let pk={
 			type:"wantDropHandPacket",
 			destcls:"player",
@@ -86,13 +100,14 @@ var p=Player;Player=class extends p{
 		if(this.handed){
 			this.game.network.sendPacket(pk);
 		}
+		}
 	}
 	
 	doTick(){
 		p.prototype.doTick.call(this);
 		
 		let needSync=false;
-		if(Math.abs(this.locx-this.lastMovementSent.x)>0.5 || Math.abs(this.locy-this.lastMovementSent.y)>0.5)
+		if(Math.abs(this.locx-this.lastMovementSent.x)>2 || Math.abs(this.locy-this.lastMovementSent.y)>2)
 			needSync=true;
 		if(this.lastMovementSent.handentityid==0 && this.handed)//上次没拿,这次有拿
 			needSync=true;
