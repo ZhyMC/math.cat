@@ -91,7 +91,6 @@ var p=Player;Player=class extends p{
 		}
 	}
 	tryDropHand(state){
-		if(state){
 		let pk={
 			type:"wantDropHandPacket",
 			destcls:"player",
@@ -100,7 +99,7 @@ var p=Player;Player=class extends p{
 		if(this.handed){
 			this.game.network.sendPacket(pk);
 		}
-		}
+		
 	}
 	
 	doTick(){
