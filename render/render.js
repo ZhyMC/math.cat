@@ -174,6 +174,7 @@ class Render{
 		this.buf.fillText("DrawImage():"+this.drawTick,0,140);
 		this.buf.fillText("DisplayBricks:"+this._nowBricksDrawingKeys.size,0,160);
 		this.buf.fillText("EntityId:"+this.game.MPlayer.entityId,0,180);
+		this.buf.fillText("Packets/s:"+this.game.network.PacketsPerSecond,0,200);
 	
 		
 		/*let isd;
