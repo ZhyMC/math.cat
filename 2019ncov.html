@@ -83,7 +83,7 @@ function empty(){
 	document.getElementById("details").innerHTML="";
 }
 async function refresh(){
-	let obj=await fetch("http://www.math.cat:2019/ncov/query").then((b)=>b.json());
+	let obj=await fetch("https://www.math.cat:2019/ncov/query").then((b)=>b.json());
 	let list=obj.list;
 	let count=obj.count;
 	document.getElementById("number").innerText=count;
