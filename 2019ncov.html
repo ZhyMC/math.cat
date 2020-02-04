@@ -1,0 +1,100 @@
+<html>
+
+<head>
+
+<style>
+body{
+background:#EEE;
+}
+.card{
+border:1px solid #CCC;
+margin:20px;
+padding:20px;
+background:#FFF;
+min-height:25vh;
+}
+#container{
+width:80vw;
+margin:0 auto;
+}
+#title{
+text-align:center;
+}
+#counter{
+margin-left:20px;
+border:1px solid #CCC;
+padding:5px;
+width:200px;
+text-align:center;
+}
+#number{
+font-size:50px;
+}
+.title{
+margin-top:5px;
+margin-bottom:5px;
+border:1px solid #EEE;
+padding:10px;
+width:200px;
+}
+.content{
+margin:10px;
+}
+</style>
+
+</head>
+
+<body>
+<div id="container">
+<div id="title">
+<h1> 2019 新型冠状病毒 求助信息 实时滚动统计</h1>
+<h2>注：数据取自微博，相同用户不会记录第二次</h2>
+</div>
+
+<div id="counter">总求助人数:<div id="number">加载中</div></div>
+
+<div id="details">
+	
+</div>
+</div>
+
+</body>
+<script>
+
+function add(nick,id,content){
+	let template=`	<div class="card">
+		<div class="title">昵称:</div>
+		<div id="nick" class="content">${nick}</div>
+		
+		<div class="title">序号:</div>
+		<div id="id" class="content">${id}</div>
+		
+		<div class="title">内容:</div>
+		<div class="content">${content}</div>
+		
+	</div>
+	`;
+	let details=document.getElementById("details");
+	let div=document.createElement("div");
+	div.innerHTML=template;
+	details.append(div);
+}
+function empty(){
+	document.getElementById("details").innerHTML="";
+}
+async function refresh(){
+	let obj=await fetch("http://www.math.cat:2019/ncov/query").then((b)=>b.json());
+	let list=obj.list;
+	let count=obj.count;
+	document.getElementById("number").innerText=count;
+	empty();
+	for(var i in list)
+	add(list[i].wbnick,list[i].id,list[i].wbtext);
+	
+}
+
+refresh();setInterval(()=>refresh(),3000);
+
+</script>
+
+</html>
