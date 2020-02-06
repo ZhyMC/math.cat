@@ -77,7 +77,7 @@ function add(nick,id,content){
 		<div id="id" class="content">${id}</div>
 		
 		<div class="title">内容:</div>
-		<div class="content">${content}</div>
+		<div class="content">${content.replace(new RegExp("\n","g"),"<br/>")}</div>
 		
 	</div>
 	`;
